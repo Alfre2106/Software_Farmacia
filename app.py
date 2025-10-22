@@ -27,12 +27,13 @@ CORS(app,
 
 # Configuración de la Base de Datos
 DB_CONFIG = {
-    'host': os.getenv('MYSQLHOST', 'localhost'),
-    'user': os.getenv('MYSQLUSER', 'root'),
-    'password': os.getenv('MYSQLPASSWORD', ''),
-    'database': os.getenv('MYSQLDATABASE', 'farmacia_db'),
+    'host': os.getenv('MYSQLHOST'),
+    'user': os.getenv('MYSQLUSER'),
+    'password': os.getenv('MYSQLPASSWORD'),
+    'database': os.getenv('MYSQLDATABASE'),
     'port': int(os.getenv('MYSQLPORT', 3306))
 }
+
 
 
 def get_db():
@@ -862,3 +863,4 @@ if __name__ == '__main__':
     print("="*60 + "\n")
 
     app.run(debug=True, host='0.0.0.0', port=5000)
+
