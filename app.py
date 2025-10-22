@@ -6,10 +6,10 @@ Incluye: Login, Dashboard, Productos, Clientes, Facturación y REPORTES
 
 from flask import Flask, request, jsonify, session, send_from_directory
 from flask_cors import CORS
-import mysql.connector
 from datetime import datetime, timedelta
 import hashlib
 import os
+import mysql.connector
 from functools import wraps
 
 app = Flask(__name__, static_folder='static', static_url_path='')
@@ -863,4 +863,5 @@ if __name__ == '__main__':
     print("="*60 + "\n")
 
     app.run(debug=True, host='0.0.0.0', port=5000)
+
 
