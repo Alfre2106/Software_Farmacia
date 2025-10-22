@@ -86,10 +86,12 @@ FARMACIA_SISTEMA/
 ---
 
 ## 👨‍💻 Autor
-**Desarrollado por:** SOFTSCAPE 
+**Desarrollado por:** SOFTSCAPE(ALfredo Mercado, Edgar Rodelo, Jesus Cera, Fabian Polo, Miguelangel De La Hoz)
+
 **Lenguaje principal:** Python 3.10+  
 **Framework:** Flask  
 **Base de datos:** MySQL  
+
 =======
 # Software_Farmacia
 >>>>>>> 449a3be741a58967697070daee17473daf587bb9
