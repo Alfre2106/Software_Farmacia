@@ -1,0 +1,9 @@
+{
+  "files.exclude": {
+    "**/venv": true
+  },
+  "python.defaultInterpreterPath": "venv/Scripts/python.exe",
+  "editor.formatOnSave": true,
+  "python.analysis.autoImportCompletions": true,
+  "python.analysis.extraPaths": ["./"]
+}
