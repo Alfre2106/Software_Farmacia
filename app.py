@@ -27,11 +27,13 @@ CORS(app,
 
 # Configuración de la Base de Datos
 DB_CONFIG = {
-    'host': 'localhost',
-    'user': 'root',
-    'password': '',
-    'database': 'farmacia_db'
+    'host': os.getenv('MYSQLHOST', 'localhost'),
+    'user': os.getenv('MYSQLUSER', 'root'),
+    'password': os.getenv('MYSQLPASSWORD', ''),
+    'database': os.getenv('MYSQLDATABASE', 'farmacia_db'),
+    'port': int(os.getenv('MYSQLPORT', 3306))
 }
+
 
 def get_db():
     """Conexión a la base de datos"""
@@ -78,10 +80,13 @@ def login():
     if not username or not password:
         return jsonify({'error': 'Usuario y contraseña requeridos'}), 400
     
+    db = None
+    cursor = None
     try:
         db = get_db()
         cursor = db.cursor(dictionary=True)
         
+        # ⚠️ IMPORTANTE: Usa hash_password si tus contraseñas están cifradas
         cursor.execute(
             "SELECT * FROM usuarios WHERE username = %s AND password = %s AND activo = TRUE",
             (username, password)
@@ -117,8 +122,10 @@ def login():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
     finally:
-        cursor.close()
-        db.close()
+        if cursor:
+            cursor.close()
+        if db:
+            db.close()
 
 @app.route('/api/logout', methods=['POST'])
 def logout():
@@ -853,4 +860,5 @@ if __name__ == '__main__':
     print("   📊 /api/reportes/ventas-diarias")
     print("   📊 /api/reportes/resumen-general")
     print("="*60 + "\n")
+
     app.run(debug=True, host='0.0.0.0', port=5000)
