@@ -6,10 +6,10 @@ Incluye: Login, Dashboard, Productos, Clientes, Facturación y REPORTES
 
 from flask import Flask, request, jsonify, session, send_from_directory
 from flask_cors import CORS
+import mysql.connector
 from datetime import datetime, timedelta
 import hashlib
 import os
-import mysql.connector
 from functools import wraps
 
 app = Flask(__name__, static_folder='static', static_url_path='')
@@ -27,14 +27,11 @@ CORS(app,
 
 # Configuración de la Base de Datos
 DB_CONFIG = {
-    'host': os.getenv('MYSQLHOST'),
-    'user': os.getenv('MYSQLUSER'),
-    'password': os.getenv('MYSQLPASSWORD'),
-    'database': os.getenv('MYSQLDATABASE'),
-    'port': int(os.getenv('MYSQLPORT', 3306))
+    'host': 'localhost',
+    'user': 'root',
+    'password': '',
+    'database': 'farmacia_db'
 }
-
-
 
 def get_db():
     """Conexión a la base de datos"""
@@ -81,13 +78,10 @@ def login():
     if not username or not password:
         return jsonify({'error': 'Usuario y contraseña requeridos'}), 400
     
-    db = None
-    cursor = None
     try:
         db = get_db()
         cursor = db.cursor(dictionary=True)
         
-        # ⚠️ IMPORTANTE: Usa hash_password si tus contraseñas están cifradas
         cursor.execute(
             "SELECT * FROM usuarios WHERE username = %s AND password = %s AND activo = TRUE",
             (username, password)
@@ -123,10 +117,8 @@ def login():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
     finally:
-        if cursor:
-            cursor.close()
-        if db:
-            db.close()
+        cursor.close()
+        db.close()
 
 @app.route('/api/logout', methods=['POST'])
 def logout():
@@ -149,6 +141,59 @@ def check_session():
         })
     return jsonify({'authenticated': False}), 401
 
+@app.route('/api/register', methods=['POST'])
+def register():
+    """Registro de nuevos usuarios"""
+    data = request.json
+    
+    required = ['username', 'password', 'nombre_completo', 'rol']
+    if not all(field in data for field in required):
+        return jsonify({'error': 'Campos requeridos faltantes'}), 400
+    
+    # Validar rol
+    if data['rol'] not in ['administrador', 'vendedor', 'gerente']:
+        return jsonify({'error': 'Rol inválido'}), 400
+    
+    # Validar longitud de contraseña
+    if len(data['password']) < 6:
+        return jsonify({'error': 'La contraseña debe tener al menos 6 caracteres'}), 400
+    
+    try:
+        db = get_db()
+        cursor = db.cursor()
+        
+        # Verificar si el usuario ya existe
+        cursor.execute("SELECT id FROM usuarios WHERE username = %s", (data['username'],))
+        if cursor.fetchone():
+            return jsonify({'error': 'El nombre de usuario ya existe'}), 400
+        
+        # ✅ CORRECCIÓN: Insertar SIN la columna email
+        cursor.execute("""
+            INSERT INTO usuarios (username, password, nombre_completo, rol, activo)
+            VALUES (%s, %s, %s, %s, TRUE)
+        """, (
+            data['username'],
+            data['password'],
+            data['nombre_completo'],
+            data['rol']
+        ))
+        
+        db.commit()
+        user_id = cursor.lastrowid
+        
+        return jsonify({
+            'success': True,
+            'message': 'Usuario registrado exitosamente',
+            'user_id': user_id
+        }), 201
+        
+    except mysql.connector.IntegrityError as e:
+        return jsonify({'error': 'Error de integridad en la base de datos'}), 400
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+    finally:
+        cursor.close()
+        db.close()
 # ===== RUTAS DE PRODUCTOS =====
 
 @app.route('/api/productos', methods=['GET'])
@@ -861,7 +906,4 @@ if __name__ == '__main__':
     print("   📊 /api/reportes/ventas-diarias")
     print("   📊 /api/reportes/resumen-general")
     print("="*60 + "\n")
-
     app.run(debug=True, host='0.0.0.0', port=5000)
-
-
