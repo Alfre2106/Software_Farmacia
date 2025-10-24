@@ -2240,25 +2240,22 @@
           event.target.style.display = "none";
         }
       };
-    // ----------------------
-// 🧾 FUNCIONES EXTRA PARA FACTURAS
-// ----------------------
 
-// ✅ Mostrar modal del detalle de factura
+
 function showModalDetalleFactura(htmlFactura) {
   const modal = document.getElementById("modalDetalleFactura");
   const detalle = document.getElementById("detalleFacturaContent");
 
-  // Limpia contenido anterior para evitar duplicados
+  
   detalle.innerHTML = htmlFactura || "";
   modal.style.display = "flex";
 }
 
-// ✅ Cerrar modal
+
 function closeModalDetalle() {
   const modal = document.getElementById("modalDetalleFactura");
   const detalle = document.getElementById("detalleFacturaContent");
-  detalle.innerHTML = ""; // Limpia al cerrar
+  detalle.innerHTML = ""; 
   modal.style.display = "none";
 }
 
@@ -2291,11 +2288,11 @@ function imprimirFactura() {
   ventana.print();
 }
 
-// ✅ Guardar factura en PDF sin salir del modal
+
 function guardarFacturaPDF() {
   // Verificar que html2pdf esté disponible
   if (typeof html2pdf === "undefined") {
-    alert("⚠️ No se ha cargado la librería html2pdf.js. Asegúrate de incluirla en tu HTML.");
+    alert("⚠️ No se ha cargado la librería html2pdf.js.");
     return;
   }
 
@@ -2320,3 +2317,4 @@ function guardarFacturaPDF() {
     </script>
   </body>
 </html>
+
