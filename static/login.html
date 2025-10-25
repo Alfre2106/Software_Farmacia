@@ -1196,7 +1196,11 @@
           <h3>🧾 Detalle Factura</h3>
           <button class="btn-close" onclick="closeModalDetalle()">×</button>
         </div>
+
+        <!-- Contenido dinámico -->
         <div id="detalleFacturaContent"></div>
+
+        <!-- Botones -->
         <div style="text-align: right; margin-top: 20px">
           <button class="btn-primary" onclick="imprimirFactura()">
             🖨️ Imprimir
@@ -1325,6 +1329,13 @@
           credentials: "include",
         });
         currentUser = null;
+
+        document.getElementById("loginUsername").value = "";
+        document.getElementById("loginPassword").value = "";
+        document.getElementById("loginForm").reset();
+
+        document.getElementById("loginAlert").style.display = "none";
+
         document.getElementById("loginPage").style.display = "flex";
         document.getElementById("dashboardPage").style.display = "none";
       }
@@ -1379,7 +1390,7 @@
 
       function showReportes() {
         // Verificar si el usuario es administrador
-        if (currentUser.rol !== "administrador") {
+        if ((currentUser.rol !== "administrador", "gerente")) {
           alert(
             "❌ Acceso denegado. Solo los administradores pueden ver los reportes."
           );
@@ -2253,18 +2264,25 @@
           event.target.style.display = "none";
         }
       };
+      // ----------------------
+      // 🧾 FUNCIONES EXTRA PARA FACTURAS
+      // ----------------------
+
+      // ✅ Mostrar modal del detalle de factura
       function showModalDetalleFactura(htmlFactura) {
         const modal = document.getElementById("modalDetalleFactura");
         const detalle = document.getElementById("detalleFacturaContent");
 
+        // Limpia contenido anterior para evitar duplicados
         detalle.innerHTML = htmlFactura || "";
         modal.style.display = "flex";
       }
 
+      // ✅ Cerrar modal
       function closeModalDetalle() {
         const modal = document.getElementById("modalDetalleFactura");
         const detalle = document.getElementById("detalleFacturaContent");
-        detalle.innerHTML = ""; 
+        detalle.innerHTML = ""; // Limpia al cerrar
         modal.style.display = "none";
       }
 
