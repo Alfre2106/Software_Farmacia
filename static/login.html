@@ -580,34 +580,32 @@
         color: #333;
       }
 
-    /* Modal de factura más pequeño */
-.modal-factura {
-  width: 70%;
-  max-width: 600px;
-  max-height: 80vh;
-  overflow-y: auto;
-  animation: fadeIn 0.3s ease;
-}
+      /* Modal de factura más pequeño */
+      .modal-factura {
+        width: 70%;
+        max-width: 600px;
+        max-height: 80vh;
+        overflow-y: auto;
+        animation: fadeIn 0.3s ease;
+      }
 
-/* Botón de cierre */
-.btn-close {
-  background: none;
-  border: none;
-  font-size: 24px;
-  cursor: pointer;
-  color: #888;
-  transition: color 0.2s;
-}
-.btn-close:hover {
-  color: #333;
-}
-
-
+      /* Botón de cierre */
+      .btn-close {
+        background: none;
+        border: none;
+        font-size: 24px;
+        cursor: pointer;
+        color: #888;
+        transition: color 0.2s;
+      }
+      .btn-close:hover {
+        color: #333;
+      }
     </style>
   </head>
   <body>
     <!-- Librería para generar PDFs -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <!-- LOGIN PAGE -->
     <div id="loginPage" class="login-container">
       <div class="login-box">
@@ -749,7 +747,7 @@
               <h3>Historial</h3>
               <p>Facturas</p>
             </div>
-            <div class="menu-card" onclick="showReportes()">
+            <div id="btnReportes" class="menu-card" onclick="showReportes()">
               <div class="menu-card-icon">📊</div>
               <h3>Reportes</h3>
               <p>Análisis</p>
@@ -1191,24 +1189,24 @@
         </form>
       </div>
     </div>
-   
+
     <div id="modalDetalleFactura" class="modal">
-  <div class="modal-content modal-factura">
-    <div class="modal-header">
-      <h3>🧾 Detalle Factura</h3>
-      <button class="btn-close" onclick="closeModalDetalle()">×</button>
+      <div class="modal-content modal-factura">
+        <div class="modal-header">
+          <h3>🧾 Detalle Factura</h3>
+          <button class="btn-close" onclick="closeModalDetalle()">×</button>
+        </div>
+        <div id="detalleFacturaContent"></div>
+        <div style="text-align: right; margin-top: 20px">
+          <button class="btn-primary" onclick="imprimirFactura()">
+            🖨️ Imprimir
+          </button>
+          <button class="btn-secondary" onclick="guardarFacturaPDF()">
+            💾 Guardar PDF
+          </button>
+        </div>
+      </div>
     </div>
-
-    <!-- Contenido dinámico -->
-    <div id="detalleFacturaContent"></div>
-
-    <!-- Botones -->
-    <div style="text-align: right; margin-top: 20px;">
-      <button class="btn-primary" onclick="imprimirFactura()">🖨️ Imprimir</button>
-      <button class="btn-secondary" onclick="guardarFacturaPDF()">💾 Guardar PDF</button>
-    </div>
-  </div>
-</div>
     <script>
       const API_URL = `${window.location.protocol}//${window.location.host}/api`;
       let currentUser = null;
@@ -1344,6 +1342,14 @@
           document.getElementById(
             "userRole"
           ).textContent = `Rol: ${currentUser.rol}`;
+
+          // Ocultar botón de reportes si no es administrador
+          const btnReportes = document.getElementById("btnReportes");
+          if (btnReportes) {
+            btnReportes.style.display =
+              currentUser.rol === "administrador" ? "block" : "none";
+          }
+
           loadDashboardData();
         }
       }
@@ -1372,6 +1378,13 @@
       }
 
       function showReportes() {
+        // Verificar si el usuario es administrador
+        if (currentUser.rol !== "administrador") {
+          alert(
+            "❌ Acceso denegado. Solo los administradores pueden ver los reportes."
+          );
+          return;
+        }
         hideAllViews();
         document.getElementById("reportesView").classList.remove("hidden");
         const hoy = new Date();
@@ -2240,32 +2253,31 @@
           event.target.style.display = "none";
         }
       };
+      function showModalDetalleFactura(htmlFactura) {
+        const modal = document.getElementById("modalDetalleFactura");
+        const detalle = document.getElementById("detalleFacturaContent");
 
+        detalle.innerHTML = htmlFactura || "";
+        modal.style.display = "flex";
+      }
 
-function showModalDetalleFactura(htmlFactura) {
-  const modal = document.getElementById("modalDetalleFactura");
-  const detalle = document.getElementById("detalleFacturaContent");
+      function closeModalDetalle() {
+        const modal = document.getElementById("modalDetalleFactura");
+        const detalle = document.getElementById("detalleFacturaContent");
+        detalle.innerHTML = ""; 
+        modal.style.display = "none";
+      }
 
-  
-  detalle.innerHTML = htmlFactura || "";
-  modal.style.display = "flex";
-}
+      // ✅ Imprimir factura (abre vista limpia sin cerrar modal)
+      function imprimirFactura() {
+        const contenido = document.getElementById(
+          "detalleFacturaContent"
+        ).innerHTML;
+        const tituloFactura =
+          (contenido.match(/Factura:\\s*(\\w+)/) || [])[1] || "Factura";
 
-
-function closeModalDetalle() {
-  const modal = document.getElementById("modalDetalleFactura");
-  const detalle = document.getElementById("detalleFacturaContent");
-  detalle.innerHTML = ""; 
-  modal.style.display = "none";
-}
-
-// ✅ Imprimir factura (abre vista limpia sin cerrar modal)
-function imprimirFactura() {
-  const contenido = document.getElementById('detalleFacturaContent').innerHTML;
-  const tituloFactura = (contenido.match(/Factura:\\s*(\\w+)/) || [])[1] || 'Factura';
-
-  const ventana = window.open('', tituloFactura, 'width=900,height=700');
-  ventana.document.write(`
+        const ventana = window.open("", tituloFactura, "width=900,height=700");
+        ventana.document.write(`
     <html>
     <head>
       <title>${tituloFactura}</title>
@@ -2283,38 +2295,41 @@ function imprimirFactura() {
     </body>
     </html>
   `);
-  ventana.document.close();
-  ventana.focus();
-  ventana.print();
-}
+        ventana.document.close();
+        ventana.focus();
+        ventana.print();
+      }
 
+      // ✅ Guardar factura en PDF sin salir del modal
+      function guardarFacturaPDF() {
+        // Verificar que html2pdf esté disponible
+        if (typeof html2pdf === "undefined") {
+          alert(
+            "⚠️ No se ha cargado la librería html2pdf.js. Asegúrate de incluirla en tu HTML."
+          );
+          return;
+        }
 
-function guardarFacturaPDF() {
-  // Verificar que html2pdf esté disponible
-  if (typeof html2pdf === "undefined") {
-    alert("⚠️ No se ha cargado la librería html2pdf.js.");
-    return;
-  }
+        const elemento = document.getElementById("detalleFacturaContent");
+        if (!elemento) {
+          alert("No se encontró el contenido de la factura.");
+          return;
+        }
 
-  const elemento = document.getElementById('detalleFacturaContent');
-  if (!elemento) {
-    alert("No se encontró el contenido de la factura.");
-    return;
-  }
+        const nombreFactura =
+          (elemento.innerHTML.match(/Factura:\\s*(\\w+)/) || [])[1] ||
+          "Factura";
 
-  const nombreFactura = (elemento.innerHTML.match(/Factura:\\s*(\\w+)/) || [])[1] || 'Factura';
+        const opciones = {
+          margin: 10,
+          filename: `${nombreFactura}.pdf`,
+          image: { type: "jpeg", quality: 0.98 },
+          html2canvas: { scale: 2 },
+          jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
+        };
 
-  const opciones = {
-    margin: 10,
-    filename: `${nombreFactura}.pdf`,
-    image: { type: 'jpeg', quality: 0.98 },
-    html2canvas: { scale: 2 },
-    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-  };
-
-  html2pdf().set(opciones).from(elemento).save();
-}
+        html2pdf().set(opciones).from(elemento).save();
+      }
     </script>
   </body>
 </html>
-
