@@ -1386,12 +1386,9 @@
         document.getElementById("historialView").classList.remove("hidden");
         loadFacturas();
       }
-      function showReportes() {
-        // Verificar si el usuario es administrador o gerente
-        if (
-          currentUser.rol === "administrador" ||
-          currentUser.rol === "gerente"
-        ) {
+     function showReportes() {
+        // Verificar si el usuario es administrador
+        if (currentUser.rol === "administrador") {
           // Permitir acceso
           hideAllViews();
           document.getElementById("reportesView").classList.remove("hidden");
@@ -1404,7 +1401,7 @@
           cargarReportes();
         } else {
           alert(
-            "❌ Acceso denegado. Solo los administradores y gerentes pueden ver los reportes."
+            "❌ Acceso denegado. Solo los administradores pueden ver los reportes."
           );
           return;
         }
@@ -2355,3 +2352,4 @@
     </script>
   </body>
 </html>
+
