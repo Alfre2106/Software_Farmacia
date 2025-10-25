@@ -580,7 +580,6 @@
         color: #333;
       }
 
-      /* Modal de factura más pequeño */
       .modal-factura {
         width: 70%;
         max-width: 600px;
@@ -589,7 +588,7 @@
         animation: fadeIn 0.3s ease;
       }
 
-      /* Botón de cierre */
+  
       .btn-close {
         background: none;
         border: none;
@@ -604,7 +603,7 @@
     </style>
   </head>
   <body>
-    <!-- Librería para generar PDFs -->
+  
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <!-- LOGIN PAGE -->
     <div id="loginPage" class="login-container">
@@ -688,7 +687,7 @@
                   <option value="gerente">📊 Gerente</option>
                 </select>
               </div>
-              <button type="submit" class="btn"> Crear Cuenta</button>
+              <button type="submit" class="btn">Crear Cuenta</button>
             </form>
           </div>
         </div>
@@ -1387,23 +1386,28 @@
         document.getElementById("historialView").classList.remove("hidden");
         loadFacturas();
       }
-
       function showReportes() {
-        // Verificar si el usuario es administrador
-        if ((currentUser.rol !== "administrador", "gerente")) {
+        // Verificar si el usuario es administrador o gerente
+        if (
+          currentUser.rol === "administrador" ||
+          currentUser.rol === "gerente"
+        ) {
+          // Permitir acceso
+          hideAllViews();
+          document.getElementById("reportesView").classList.remove("hidden");
+          const hoy = new Date();
+          const hace30dias = new Date();
+          hace30dias.setDate(hoy.getDate() - 30);
+          document.getElementById("reporteFechaFin").valueAsDate = hoy;
+          document.getElementById("reporteFechaInicio").valueAsDate =
+            hace30dias;
+          cargarReportes();
+        } else {
           alert(
-            "❌ Acceso denegado. Solo los administradores pueden ver los reportes."
+            "❌ Acceso denegado. Solo los administradores y gerentes pueden ver los reportes."
           );
           return;
         }
-        hideAllViews();
-        document.getElementById("reportesView").classList.remove("hidden");
-        const hoy = new Date();
-        const hace30dias = new Date();
-        hace30dias.setDate(hoy.getDate() - 30);
-        document.getElementById("reporteFechaFin").valueAsDate = hoy;
-        document.getElementById("reporteFechaInicio").valueAsDate = hace30dias;
-        cargarReportes();
       }
 
       function hideAllViews() {
@@ -2351,6 +2355,3 @@
     </script>
   </body>
 </html>
-
-
-
