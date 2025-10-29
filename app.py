@@ -1,9 +1,3 @@
-"""
-Sistema de Gestión de Farmacia - Backend RENDER (VERSIÓN SIMPLIFICADA)
-Flask + MySQL
-Versión minimalista con solo lo esencial
-"""
-
 from flask import Flask, request, jsonify, session, send_from_directory
 from flask_cors import CORS
 import mysql.connector
@@ -11,12 +5,9 @@ from datetime import datetime, timedelta
 import hashlib
 import os
 from functools import wraps
-from dotenv import load_dotenv
-
-load_dotenv()
 
 app = Flask(__name__, static_folder='static', static_url_path='')
-app.secret_key = os.getenv('SECRET_KEY', 'farmacia_secret_key_2025')
+app.secret_key = 'farmacia_secret_key_2025'
 app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
 app.config['SESSION_COOKIE_SECURE'] = False
 app.config['SESSION_COOKIE_HTTPONLY'] = True
@@ -24,32 +15,21 @@ app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(hours=24)
 
 CORS(app, 
      supports_credentials=True, 
-     origins=[
-        'http://localhost:5000',
-        'http://127.0.0.1:5000',
-        'https://farmacia-sistema.onrender.com',
-        os.getenv('FRONTEND_URL', '')
-     ],
+     origins=['http://localhost:5000', 'http://127.0.0.1:5000'],
      allow_headers=['Content-Type'],
      methods=['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'])
 
+# Configuración de la Base de Datos
 DB_CONFIG = {
-    'host': os.getenv('DB_HOST', 'localhost'),
-    'user': os.getenv('DB_USER', 'root'),
-    'password': os.getenv('DB_PASSWORD', ''),
-    'database': os.getenv('DB_NAME', 'farmacia_db'),
-    'port': int(os.getenv('DB_PORT', 3306)),
-    'auth_plugin': 'mysql_native_password',
-    'connection_timeout': 10
+    'host': 'localhost',
+    'user': 'root',
+    'password': '',
+    'database': 'farmacia_db'
 }
 
 def get_db():
     """Conexión a la base de datos"""
-    try:
-        return mysql.connector.connect(**DB_CONFIG)
-    except mysql.connector.Error as e:
-        print(f"Error de conexión a BD: {e}")
-        raise
+    return mysql.connector.connect(**DB_CONFIG)
 
 def hash_password(password):
     """Hash simple de contraseña"""
@@ -164,9 +144,11 @@ def register():
     if not all(field in data for field in required):
         return jsonify({'error': 'Campos requeridos faltantes'}), 400
     
+    # Validar rol
     if data['rol'] not in ['administrador', 'vendedor', 'gerente']:
         return jsonify({'error': 'Rol inválido'}), 400
     
+    # Validar longitud de contraseña
     if len(data['password']) < 6:
         return jsonify({'error': 'La contraseña debe tener al menos 6 caracteres'}), 400
     
@@ -174,10 +156,12 @@ def register():
         db = get_db()
         cursor = db.cursor()
         
+        # Verificar si el usuario ya existe
         cursor.execute("SELECT id FROM usuarios WHERE username = %s", (data['username'],))
         if cursor.fetchone():
             return jsonify({'error': 'El nombre de usuario ya existe'}), 400
         
+        # ✅ CORRECCIÓN: Insertar SIN la columna email
         cursor.execute("""
             INSERT INTO usuarios (username, password, nombre_completo, rol, activo)
             VALUES (%s, %s, %s, %s, TRUE)
@@ -197,7 +181,7 @@ def register():
             'user_id': user_id
         }), 201
         
-    except mysql.connector.IntegrityError:
+    except mysql.connector.IntegrityError as e:
         return jsonify({'error': 'Error de integridad en la base de datos'}), 400
     except Exception as e:
         return jsonify({'error': str(e)}), 500
@@ -701,7 +685,7 @@ def crear_factura():
 @app.route('/api/reportes/ventas-horario', methods=['GET'])
 @login_required
 def reporte_ventas_horario():
-    """Reporte de ventas por horario"""
+    """RF4 - Reporte de ventas por horario"""
     try:
         db = get_db()
         cursor = db.cursor(dictionary=True)
@@ -907,9 +891,4 @@ def reporte_resumen_general():
 # ===== INICIAR SERVIDOR =====
 
 if __name__ == '__main__':
-    port = int(os.getenv('PORT', 5000))
-    debug_mode = os.getenv('ENVIRONMENT', 'development') == 'development'
-    
-    print(f"\nFarmacia iniciada en puerto {port} (debug={debug_mode})\n")
-    
-    app.run(debug=debug_mode, host='0.0.0.0', port=port)
+    app.run(debug=True, host='0.0.0.0', port=5000)
