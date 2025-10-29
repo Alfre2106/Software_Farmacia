@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 22-10-2025 a las 18:41:24
+-- Tiempo de generación: 29-10-2025 a las 22:53:25
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -40,7 +40,8 @@ CREATE TABLE `alertas_stock` (
 --
 
 INSERT INTO `alertas_stock` (`id`, `id_producto`, `mensaje`, `leido`, `fecha_creacion`) VALUES
-(1, 2, 'Stock bajo: Ibuprofeno 400mg (4 unidades)', 0, '2025-10-22 16:26:28');
+(1, 2, 'Stock bajo: Ibuprofeno 400mg (4 unidades)', 0, '2025-10-22 16:26:28'),
+(2, 6, 'Stock bajo: Diclofenaco (3 unidades)', 0, '2025-10-28 17:15:51');
 
 -- --------------------------------------------------------
 
@@ -143,7 +144,15 @@ INSERT INTO `detalle_facturas` (`id`, `id_factura`, `id_producto`, `cantidad`, `
 (51, 25, 3, 6, 3500.00, 21000.00),
 (52, 25, 4, 3, 2500.00, 7500.00),
 (53, 26, 3, 20, 3500.00, 70000.00),
-(54, 27, 2, 10, 1800.00, 18000.00);
+(54, 27, 2, 10, 1800.00, 18000.00),
+(55, 28, 1, 10, 1200.00, 12000.00),
+(56, 28, 3, 15, 3500.00, 52500.00),
+(57, 29, 6, 20, 1100.00, 22000.00),
+(58, 29, 2, 12, 1800.00, 21600.00),
+(59, 30, 6, 7, 1100.00, 7700.00),
+(60, 30, 2, 10, 1800.00, 18000.00),
+(61, 31, 1, 10, 1200.00, 12000.00),
+(62, 31, 2, 7, 1800.00, 12600.00);
 
 -- --------------------------------------------------------
 
@@ -197,7 +206,11 @@ INSERT INTO `facturas` (`id`, `numero_factura`, `fecha`, `horario`, `id_cliente`
 (24, 'FAC000024', '2025-10-21 23:34:40', 'mañana', 4, 2, 36000.00, 0.00, 0.00, 36000.00, 'efectivo', NULL),
 (25, 'FAC000025', '2025-10-22 01:34:40', 'tarde', 2, 2, 28000.00, 0.00, 0.00, 28000.00, 'tarjeta', NULL),
 (26, 'FAC000026', '2025-10-22 16:21:24', 'mañana', 6, 1, 70000.00, 0.00, 0.00, 70000.00, 'tarjeta', ''),
-(27, 'FAC000027', '2025-10-22 16:26:28', 'mañana', 7, 1, 18000.00, 0.00, 0.00, 18000.00, 'efectivo', '');
+(27, 'FAC000027', '2025-10-22 16:26:28', 'mañana', 7, 1, 18000.00, 0.00, 0.00, 18000.00, 'efectivo', ''),
+(28, 'FAC000028', '2025-10-24 16:18:25', 'mañana', 5, 1, 64500.00, 0.00, 0.00, 64500.00, 'tarjeta', ''),
+(29, 'FAC000029', '2025-10-24 17:04:29', 'tarde', 7, 2, 43600.00, 0.00, 0.00, 43600.00, 'efectivo', ''),
+(30, 'FAC000030', '2025-10-28 17:15:51', 'tarde', 4, 1, 25700.00, 0.00, 0.00, 25700.00, 'efectivo', ''),
+(31, 'FAC000031', '2025-10-29 20:48:39', 'tarde', 3, 1, 24600.00, 0.00, 0.00, 24600.00, 'efectivo', '');
 
 -- --------------------------------------------------------
 
@@ -224,7 +237,15 @@ INSERT INTO `movimientos_inventario` (`id`, `id_producto`, `tipo_movimiento`, `c
 (1, 1, 'salida', 10, 1, 1, 'Venta', '2025-10-22 01:27:20'),
 (2, 2, 'salida', 5, 1, 2, 'Venta', '2025-10-22 01:30:35'),
 (3, 3, 'salida', 20, 1, 26, 'Venta', '2025-10-22 16:21:24'),
-(4, 2, 'salida', 10, 1, 27, 'Venta', '2025-10-22 16:26:28');
+(4, 2, 'salida', 10, 1, 27, 'Venta', '2025-10-22 16:26:28'),
+(5, 1, 'salida', 10, 1, 28, 'Venta', '2025-10-24 16:18:25'),
+(6, 3, 'salida', 15, 1, 28, 'Venta', '2025-10-24 16:18:25'),
+(7, 6, 'salida', 20, 2, 29, 'Venta', '2025-10-24 17:04:29'),
+(8, 2, 'salida', 12, 2, 29, 'Venta', '2025-10-24 17:04:29'),
+(9, 6, 'salida', 7, 1, 30, 'Venta', '2025-10-28 17:15:51'),
+(10, 2, 'salida', 10, 1, 30, 'Venta', '2025-10-28 17:15:51'),
+(11, 1, 'salida', 10, 1, 31, 'Venta', '2025-10-29 20:48:39'),
+(12, 2, 'salida', 7, 1, 31, 'Venta', '2025-10-29 20:48:39');
 
 -- --------------------------------------------------------
 
@@ -254,11 +275,13 @@ CREATE TABLE `productos` (
 --
 
 INSERT INTO `productos` (`id`, `codigo`, `nombre`, `descripcion`, `precio_compra`, `precio_venta`, `stock_actual`, `stock_minimo`, `categoria`, `laboratorio`, `fecha_vencimiento`, `activo`, `fecha_creacion`, `fecha_modificacion`) VALUES
-(1, 'MED001', 'Acetaminofén 500mg', 'Analgésico y antipirético', 500.00, 1200.00, 10, 20, 'Analgésicos', 'Laboratorio ABC', NULL, 1, '2025-10-22 00:35:55', '2025-10-22 02:52:35'),
-(2, 'MED002', 'Ibuprofeno 400mg', 'Antiinflamatorio no esteroideo', 800.00, 1800.00, 4, 15, 'Antiinflamatorios', 'Laboratorio XYZ', '2028-09-28', 1, '2025-10-22 00:35:55', '2025-10-22 16:26:28'),
-(3, 'MED003', 'Amoxicilina 500mg', 'Antibiótico', 1500.00, 3500.00, 130, 20, 'Antibióticos', 'Lab MNO', NULL, 1, '2025-10-22 02:34:39', '2025-10-22 16:21:24'),
+(1, 'MED001', 'Acetaminofén 500mg', 'Analgésico y antipirético', 500.00, 1200.00, 180, 20, 'Analgésicos', 'Laboratorio ABC', '2030-10-25', 1, '2025-10-22 00:35:55', '2025-10-29 20:48:39'),
+(2, 'MED002', 'Ibuprofeno 400mg', 'Antiinflamatorio no esteroideo', 800.00, 1800.00, 106, 15, 'Antiinflamatorios', 'Laboratorio XYZ', '2028-09-28', 1, '2025-10-22 00:35:55', '2025-10-29 20:48:39'),
+(3, 'MED003', 'Amoxicilina 500mg', 'Antibiótico', 1500.00, 3500.00, 10, 20, 'Antibióticos', 'Lab MNO', NULL, 1, '2025-10-22 02:34:39', '2025-10-29 20:48:02'),
 (4, 'MED004', 'Losartán 50mg', 'Antihipertensivo', 1000.00, 2500.00, 100, 15, 'Cardiovascular', 'Lab ABC', NULL, 1, '2025-10-22 02:34:39', '2025-10-22 02:34:39'),
-(5, 'MED005', 'Omeprazol 20mg', 'Antiulceroso', 800.00, 2000.00, 120, 20, 'Gastro', 'Lab XYZ', NULL, 1, '2025-10-22 02:34:39', '2025-10-22 02:34:39');
+(5, 'MED005', 'Omeprazol 20mg', 'Antiulceroso', 800.00, 2000.00, 120, 20, 'Gastro', 'Lab XYZ', NULL, 1, '2025-10-22 02:34:39', '2025-10-22 02:34:39'),
+(6, 'MED006', 'Diclofenaco', '', 1000.00, 1100.00, 200, 15, 'Antiinflamatorios', '', '2028-12-01', 1, '2025-10-24 17:01:59', '2025-10-28 17:18:26'),
+(8, 'MED007', 'Metronidazol 500mg', '', 1300.00, 1350.00, 300, 20, 'Antibióticos', 'Lab MNO', '2027-11-29', 1, '2025-10-29 20:50:45', '2025-10-29 20:50:45');
 
 -- --------------------------------------------------------
 
@@ -282,8 +305,10 @@ CREATE TABLE `usuarios` (
 --
 
 INSERT INTO `usuarios` (`id`, `username`, `password`, `nombre_completo`, `rol`, `activo`, `fecha_creacion`, `ultimo_acceso`) VALUES
-(1, 'admin', 'admin123', 'Administrador del Sistema', 'administrador', 1, '2025-10-22 00:35:54', '2025-10-22 16:23:48'),
-(2, 'vendedor1', 'vendedor123', 'Juan Pérez', 'vendedor', 1, '2025-10-22 01:01:24', '2025-10-22 02:42:34');
+(1, 'admin', 'admin123', 'Alfredo Mercado', 'administrador', 1, '2025-10-22 00:35:54', '2025-10-29 21:25:54'),
+(2, 'vendedor1', 'vendedor123', 'Juan Pérez', 'vendedor', 1, '2025-10-22 01:01:24', '2025-10-28 17:36:57'),
+(3, 'gerente1', 'gerente123', 'Edgar Rodelo', 'gerente', 1, '2025-10-22 21:37:23', '2025-10-29 21:26:33'),
+(4, 'vendedor2', 'vendedor321', 'Jesus Cera', 'vendedor', 1, '2025-10-29 21:03:22', '2025-10-29 21:03:36');
 
 --
 -- Índices para tablas volcadas
@@ -356,7 +381,7 @@ ALTER TABLE `usuarios`
 -- AUTO_INCREMENT de la tabla `alertas_stock`
 --
 ALTER TABLE `alertas_stock`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `clientes`
@@ -368,31 +393,31 @@ ALTER TABLE `clientes`
 -- AUTO_INCREMENT de la tabla `detalle_facturas`
 --
 ALTER TABLE `detalle_facturas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=55;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=63;
 
 --
 -- AUTO_INCREMENT de la tabla `facturas`
 --
 ALTER TABLE `facturas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 
 --
 -- AUTO_INCREMENT de la tabla `movimientos_inventario`
 --
 ALTER TABLE `movimientos_inventario`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT de la tabla `productos`
 --
 ALTER TABLE `productos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- Restricciones para tablas volcadas
