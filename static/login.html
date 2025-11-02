@@ -13,11 +13,13 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script>
       // Script de inicialización temprana - Se ejecuta ANTES de renderizar
-      (function() {
-        const prefersDark = localStorage.getItem('darkMode') === 'true' || 
-                           (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
+      (function () {
+        const prefersDark =
+          localStorage.getItem("darkMode") === "true" ||
+          (window.matchMedia &&
+            window.matchMedia("(prefers-color-scheme: dark)").matches);
         if (prefersDark) {
-          document.documentElement.classList.add('dark-mode');
+          document.documentElement.classList.add("dark-mode");
         }
       })();
     </script>
@@ -552,8 +554,13 @@
       }
 
       @keyframes pulse {
-        0%, 100% { opacity: 1; }
-        50% { opacity: 0.6; }
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.6;
+        }
       }
 
       /* ==================== MENU GRID ==================== */
@@ -1293,6 +1300,22 @@
           padding: 12px 16px;
         }
       }
+
+      #usuariosView {
+        width: 100%;
+        min-height: 100vh;
+      }
+
+      #dashboardView,
+      #productosView,
+      #facturacionView,
+      #historialView,
+      #reportesView,
+      #usuariosView {
+        width: 100%;
+        margin: 0;
+        padding: 0;
+      }
     </style>
   </head>
   <body>
@@ -1392,7 +1415,11 @@
       <nav class="navbar">
         <div class="navbar-brand">💊 FarmaSystem</div>
         <div class="navbar-user">
-          <button class="theme-toggle" onclick="toggleDarkMode()" title="Alternar tema oscuro">
+          <button
+            class="theme-toggle"
+            onclick="toggleDarkMode()"
+            title="Alternar tema oscuro"
+          >
             <span id="themeIcon">🌙</span>
           </button>
           <div class="user-profile">
@@ -1427,9 +1454,21 @@
               <h3>⚠️ Stock Bajo</h3>
               <div class="value" id="productosBajoStock">0</div>
               <div class="label">Productos por reponer</div>
-              <div id="stockAlertChart" style="margin-top: var(--spacing-md); padding: var(--spacing-md); border-radius: var(--radius-md); text-align: center; background: #d1fae5; border: 2px solid #10b981;">
-                <div style="font-size: 32px; margin-bottom: 8px;">✅</div>
-                <div style="color: #000000; font-weight: 600; font-size: 14px;">Stock Normal</div>
+              <div
+                id="stockAlertChart"
+                style="
+                  margin-top: var(--spacing-md);
+                  padding: var(--spacing-md);
+                  border-radius: var(--radius-md);
+                  text-align: center;
+                  background: #d1fae5;
+                  border: 2px solid #10b981;
+                "
+              >
+                <div style="font-size: 32px; margin-bottom: 8px">✅</div>
+                <div style="color: #000000; font-weight: 600; font-size: 14px">
+                  Stock Normal
+                </div>
               </div>
             </div>
 
@@ -1437,24 +1476,139 @@
               <h3>🛒 Ventas Hoy</h3>
               <div class="value" id="ventasHoy">0</div>
               <div class="label">Transacciones completadas</div>
-              <div class="stat-chart" id="chartVentas" style="height: 50px; margin-top: var(--spacing-md); gap: 8px;">
-                <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end;">
-                  <div id="ventaMañana" style="width: 100%; height: 30%; background: linear-gradient(to top, #fbbf24, #f59e0b); border-radius: 4px 4px 0 0; position: relative;">
-                    <span style="position: absolute; top: -20px; left: 50%; transform: translateX(-50%); font-size: 10px; font-weight: 600; white-space: nowrap;">🌅 0</span>
+              <div
+                class="stat-chart"
+                id="chartVentas"
+                style="height: 50px; margin-top: var(--spacing-md); gap: 8px"
+              >
+                <div
+                  style="
+                    flex: 1;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: flex-end;
+                  "
+                >
+                  <div
+                    id="ventaMañana"
+                    style="
+                      width: 100%;
+                      height: 30%;
+                      background: linear-gradient(to top, #fbbf24, #f59e0b);
+                      border-radius: 4px 4px 0 0;
+                      position: relative;
+                    "
+                  >
+                    <span
+                      style="
+                        position: absolute;
+                        top: -20px;
+                        left: 50%;
+                        transform: translateX(-50%);
+                        font-size: 10px;
+                        font-weight: 600;
+                        white-space: nowrap;
+                      "
+                      >🌅 0</span
+                    >
                   </div>
-                  <div style="font-size: 10px; color: #6b7280; margin-top: 22px; font-weight: 600;">Mañana</div>
+                  <div
+                    style="
+                      font-size: 10px;
+                      color: #6b7280;
+                      margin-top: 22px;
+                      font-weight: 600;
+                    "
+                  >
+                    Mañana
+                  </div>
                 </div>
-                <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end;">
-                  <div id="ventaTarde" style="width: 100%; height: 50%; background: linear-gradient(to top, #60a5fa, #3b82f6); border-radius: 4px 4px 0 0; position: relative;">
-                    <span style="position: absolute; top: -20px; left: 50%; transform: translateX(-50%); font-size: 10px; font-weight: 600; white-space: nowrap;">☀️ 0</span>
+                <div
+                  style="
+                    flex: 1;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: flex-end;
+                  "
+                >
+                  <div
+                    id="ventaTarde"
+                    style="
+                      width: 100%;
+                      height: 50%;
+                      background: linear-gradient(to top, #60a5fa, #3b82f6);
+                      border-radius: 4px 4px 0 0;
+                      position: relative;
+                    "
+                  >
+                    <span
+                      style="
+                        position: absolute;
+                        top: -20px;
+                        left: 50%;
+                        transform: translateX(-50%);
+                        font-size: 10px;
+                        font-weight: 600;
+                        white-space: nowrap;
+                      "
+                      >☀️ 0</span
+                    >
                   </div>
-                  <div style="font-size: 10px; color: #6b7280; margin-top: 22px; font-weight: 600;">Tarde</div>
+                  <div
+                    style="
+                      font-size: 10px;
+                      color: #6b7280;
+                      margin-top: 22px;
+                      font-weight: 600;
+                    "
+                  >
+                    Tarde
+                  </div>
                 </div>
-                <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end;">
-                  <div id="ventaNoche" style="width: 100%; height: 70%; background: linear-gradient(to top, #a855f7, #9333ea); border-radius: 4px 4px 0 0; position: relative;">
-                    <span style="position: absolute; top: -20px; left: 50%; transform: translateX(-50%); font-size: 10px; font-weight: 600; white-space: nowrap;">🌙 0</span>
+                <div
+                  style="
+                    flex: 1;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: flex-end;
+                  "
+                >
+                  <div
+                    id="ventaNoche"
+                    style="
+                      width: 100%;
+                      height: 70%;
+                      background: linear-gradient(to top, #a855f7, #9333ea);
+                      border-radius: 4px 4px 0 0;
+                      position: relative;
+                    "
+                  >
+                    <span
+                      style="
+                        position: absolute;
+                        top: -20px;
+                        left: 50%;
+                        transform: translateX(-50%);
+                        font-size: 10px;
+                        font-weight: 600;
+                        white-space: nowrap;
+                      "
+                      >🌙 0</span
+                    >
                   </div>
-                  <div style="font-size: 10px; color: #6b7280; margin-top: 22px; font-weight: 600;">Noche</div>
+                  <div
+                    style="
+                      font-size: 10px;
+                      color: #6b7280;
+                      margin-top: 22px;
+                      font-weight: 600;
+                    "
+                  >
+                    Noche
+                  </div>
                 </div>
               </div>
             </div>
@@ -1463,13 +1617,23 @@
               <h3>💰 Ingresos Hoy</h3>
               <div class="value" id="montoVentasHoy">$0</div>
               <div class="label">Ingresos totales</div>
-              <div class="stat-chart" id="chartMonto" style="height: 45px; margin-top: var(--spacing-md); justify-content: space-around; align-items: flex-end; gap: 6px;">
-                <div class="stat-chart-bar" style="height: 35%; flex: 1;"></div>
-                <div class="stat-chart-bar" style="height: 55%; flex: 1;"></div>
-                <div class="stat-chart-bar" style="height: 70%; flex: 1;"></div>
-                <div class="stat-chart-bar" style="height: 60%; flex: 1;"></div>
-                <div class="stat-chart-bar" style="height: 90%; flex: 1;"></div>
-                <div class="stat-chart-bar" style="height: 75%; flex: 1;"></div>
+              <div
+                class="stat-chart"
+                id="chartMonto"
+                style="
+                  height: 45px;
+                  margin-top: var(--spacing-md);
+                  justify-content: space-around;
+                  align-items: flex-end;
+                  gap: 6px;
+                "
+              >
+                <div class="stat-chart-bar" style="height: 35%; flex: 1"></div>
+                <div class="stat-chart-bar" style="height: 55%; flex: 1"></div>
+                <div class="stat-chart-bar" style="height: 70%; flex: 1"></div>
+                <div class="stat-chart-bar" style="height: 60%; flex: 1"></div>
+                <div class="stat-chart-bar" style="height: 90%; flex: 1"></div>
+                <div class="stat-chart-bar" style="height: 75%; flex: 1"></div>
               </div>
             </div>
           </div>
@@ -1497,6 +1661,29 @@
               <span class="menu-card-icon">📊</span>
               <h3>Reportes</h3>
               <p>Análisis y estadísticas</p>
+            </div>
+            <div id="btnUsuarios" class="menu-card" onclick="showUsuarios()">
+              <span class="menu-card-icon">👥</span>
+              <h3>Usuarios</h3>
+              <p>Gestionar usuarios del sistema</p>
+            </div>
+            <div
+              id="btnRecepciones"
+              class="menu-card"
+              onclick="showRecepciones()"
+            >
+              <span class="menu-card-icon">📥</span>
+              <h3>Recepciones</h3>
+              <p>Registro de compras</p>
+            </div>
+            <div
+              id="btnMovimientos"
+              class="menu-card"
+              onclick="showMovimientos()"
+            >
+              <span class="menu-card-icon">📊</span>
+              <h3>Movimientos</h3>
+              <p>Historial de inventario</p>
             </div>
           </div>
         </div>
@@ -1636,12 +1823,53 @@
               </div>
               <div class="form-group">
                 <label>Método de pago</label>
-                <select id="metodoPago">
+                <select id="metodoPago" onchange="toggleMontoRecibido()">
                   <option value="efectivo">💵 Efectivo</option>
                   <option value="tarjeta">💳 Tarjeta</option>
                   <option value="transferencia">🏦 Transferencia</option>
                 </select>
               </div>
+
+              <div id="campoMontoRecibido" class="form-group">
+                <label>Monto recibido *</label>
+                <input
+                  type="number"
+                  id="montoRecibido"
+                  placeholder="Ingrese el monto que paga el cliente"
+                  step="0.01"
+                  oninput="calcularCambio()"
+                />
+              </div>
+
+              <div
+                id="campoCambio"
+                class="hidden"
+                style="
+                  background: var(--success);
+                  padding: var(--spacing-md);
+                  border-radius: var(--radius-md);
+                  color: white;
+                  margin-bottom: var(--spacing-md);
+                "
+              >
+                <div
+                  style="
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                  "
+                >
+                  <span style="font-size: 14px; font-weight: 600"
+                    >💰 Cambio a devolver:</span
+                  >
+                  <span
+                    id="cambioDevolver"
+                    style="font-size: 20px; font-weight: 700"
+                    >$0</span
+                  >
+                </div>
+              </div>
+
               <div class="form-group">
                 <label>Observaciones</label>
                 <textarea
@@ -1789,6 +2017,238 @@
               <div class="bar-chart"></div>
             </div>
             <div id="noDataDiarias" class="no-data hidden">Sin datos</div>
+          </div>
+        </div>
+
+        <div id="usuariosView" class="hidden">
+          <div class="page-header">
+            <h2>Gestión de Usuarios</h2>
+            <div class="page-header-actions">
+              <button class="btn-secondary" onclick="showDashboard()">
+                ← Volver
+              </button>
+              <button class="btn-primary" onclick="showModalUsuario()">
+                + Nuevo usuario
+              </button>
+            </div>
+          </div>
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Usuario</th>
+                  <th>Nombre Completo</th>
+                  <th>Rol</th>
+                  <th>Estado</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="usuariosTable"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div id="recepcionesView" class="hidden">
+          <div class="page-header">
+            <h2>Recepciones de Inventario</h2>
+            <div class="page-header-actions">
+              <button class="btn-secondary" onclick="showDashboard()">
+                ← Volver
+              </button>
+              <button
+                class="btn-primary"
+                onclick="showModalRecepcion()"
+                id="btnNuevaRecepcion"
+              >
+                + Nueva recepción
+              </button>
+            </div>
+          </div>
+          <div class="search-bar">
+            <div class="form-row">
+              <div class="form-group">
+                <label>Fecha inicio</label>
+                <input type="date" id="recepcionFechaInicio" />
+              </div>
+              <div class="form-group">
+                <label>Fecha fin</label>
+                <input type="date" id="recepcionFechaFin" />
+              </div>
+              <div class="form-group">
+                <label>&nbsp;</label>
+                <button class="btn-primary" onclick="buscarRecepciones()">
+                  🔍 Buscar
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Número</th>
+                  <th>Fecha</th>
+                  <th>Proveedor</th>
+                  <th>Productos</th>
+                  <th>Total</th>
+                  <th>Usuario</th>
+                  <th>Ver</th>
+                </tr>
+              </thead>
+              <tbody id="recepcionesTable"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div id="movimientosView" class="hidden">
+          <div class="page-header">
+            <h2>Historial de Movimientos de Inventario</h2>
+            <div class="page-header-actions">
+              <button class="btn-secondary" onclick="showDashboard()">
+                ← Volver
+              </button>
+            </div>
+          </div>
+          <div class="search-bar">
+            <div class="form-row">
+              <div class="form-group">
+                <label>Tipo de Movimiento</label>
+                <select id="filtroTipoMovimiento">
+                  <option value="">Todos</option>
+                  <option value="entrada">📥 Entradas</option>
+                  <option value="salida">📤 Salidas</option>
+                  <option value="ajuste">⚙️ Ajustes</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Producto</label>
+                <input
+                  type="text"
+                  id="filtroProductoMovimiento"
+                  placeholder="Buscar producto..."
+                />
+              </div>
+              <div class="form-group">
+                <label>Fecha inicio</label>
+                <input type="date" id="movimientoFechaInicio" />
+              </div>
+              <div class="form-group">
+                <label>Fecha fin</label>
+                <input type="date" id="movimientoFechaFin" />
+              </div>
+              <div class="form-group">
+                <label>&nbsp;</label>
+                <button class="btn-primary" onclick="buscarMovimientos()">
+                  🔍 Buscar
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Fecha</th>
+                  <th>Tipo</th>
+                  <th>Producto</th>
+                  <th>Cantidad</th>
+                  <th>Usuario</th>
+                  <th>Motivo</th>
+                  <th>Referencia</th>
+                </tr>
+              </thead>
+              <tbody id="movimientosTable"></tbody>
+            </table>
+          </div>
+          <div
+            style="
+              background: var(--bg-primary);
+              padding: var(--spacing-lg);
+              border-radius: var(--radius-lg);
+              margin-top: var(--spacing-lg);
+              border: 1px solid var(--border);
+            "
+          >
+            <h3
+              style="
+                font-size: 16px;
+                font-weight: 700;
+                margin-bottom: var(--spacing-md);
+              "
+            >
+              📊 Resumen
+            </h3>
+            <div
+              style="
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                gap: var(--spacing-lg);
+              "
+            >
+              <div>
+                <p
+                  style="
+                    font-size: 12px;
+                    color: var(--text-secondary);
+                    margin-bottom: 4px;
+                  "
+                >
+                  Total Movimientos
+                </p>
+                <p
+                  style="
+                    font-size: 24px;
+                    font-weight: 700;
+                    color: var(--text-primary);
+                  "
+                  id="totalMovimientos"
+                >
+                  0
+                </p>
+              </div>
+              <div>
+                <p
+                  style="
+                    font-size: 12px;
+                    color: var(--text-secondary);
+                    margin-bottom: 4px;
+                  "
+                >
+                  📥 Entradas
+                </p>
+                <p
+                  style="
+                    font-size: 24px;
+                    font-weight: 700;
+                    color: var(--success);
+                  "
+                  id="totalEntradas"
+                >
+                  0
+                </p>
+              </div>
+              <div>
+                <p
+                  style="
+                    font-size: 12px;
+                    color: var(--text-secondary);
+                    margin-bottom: 4px;
+                  "
+                >
+                  📤 Salidas
+                </p>
+                <p
+                  style="
+                    font-size: 24px;
+                    font-weight: 700;
+                    color: var(--danger);
+                  "
+                  id="totalSalidas"
+                >
+                  0
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -2040,6 +2500,278 @@
         </div>
       </div>
     </div>
+
+    <div id="modalUsuario" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 id="modalUsuarioTitle">Nuevo Usuario</h3>
+          <button class="btn-close" onclick="closeModalUsuario()">×</button>
+        </div>
+        <form id="formUsuario">
+          <input type="hidden" id="usuarioId" />
+          <div class="form-group">
+            <label>Nombre completo *</label>
+            <input
+              type="text"
+              id="usuarioNombre"
+              required
+              placeholder="Ej: Juan Pérez"
+            />
+          </div>
+          <div class="form-group">
+            <label>Usuario *</label>
+            <input
+              type="text"
+              id="usuarioUsername"
+              required
+              placeholder="Nombre de usuario"
+              minlength="4"
+            />
+          </div>
+          <div class="form-group">
+            <label>Contraseña *</label>
+            <input
+              type="password"
+              id="usuarioPassword"
+              placeholder="Mínimo 6 caracteres"
+              minlength="6"
+            />
+            <div class="password-hint">
+              ⚠️ Dejar en blanco para mantener la contraseña actual (al editar)
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Rol *</label>
+            <select id="usuarioRol" required>
+              <option value="">Seleccione un rol...</option>
+              <option value="administrador">Administrador</option>
+              <option value="vendedor">Vendedor</option>
+              <option value="gerente">Gerente</option>
+            </select>
+          </div>
+          <div
+            style="
+              display: flex;
+              gap: var(--spacing-md);
+              justify-content: flex-end;
+              margin-top: var(--spacing-lg);
+            "
+          >
+            <button
+              type="button"
+              class="btn-secondary"
+              onclick="closeModalUsuario()"
+            >
+              Cancelar
+            </button>
+            <button type="submit" class="btn-primary">💾 Guardar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div id="modalRecepcion" class="modal">
+      <div class="modal-content" style="max-width: 800px">
+        <div class="modal-header">
+          <h3>Nueva Recepción de Productos</h3>
+          <button class="btn-close" onclick="closeModalRecepcion()">×</button>
+        </div>
+        <form id="formRecepcion">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Proveedor *</label>
+              <input
+                type="text"
+                id="recepcionProveedor"
+                required
+                placeholder="Nombre del proveedor"
+              />
+            </div>
+            <div class="form-group">
+              <label>Número de Documento</label>
+              <input
+                type="text"
+                id="recepcionDocumento"
+                placeholder="Factura/Remisión"
+              />
+            </div>
+          </div>
+
+          <div
+            style="
+              background: var(--bg-secondary);
+              padding: var(--spacing-lg);
+              border-radius: var(--radius-md);
+              margin-bottom: var(--spacing-lg);
+            "
+          >
+            <div
+              style="
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: var(--spacing-md);
+              "
+            >
+              <h4 style="margin: 0">📦 Productos a Recibir</h4>
+              <button
+                type="button"
+                class="btn-primary"
+                onclick="showModalAgregarProductoRecepcion()"
+                style="padding: 8px 12px; font-size: 13px"
+              >
+                + Agregar Producto
+              </button>
+            </div>
+            <div id="productosRecepcionList">
+              <p class="no-data">Sin productos agregados</p>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Observaciones</label>
+            <textarea
+              id="recepcionObservaciones"
+              rows="3"
+              placeholder="Notas adicionales..."
+            ></textarea>
+          </div>
+
+          <div
+            style="
+              background: var(--primary-light);
+              padding: var(--spacing-lg);
+              border-radius: var(--radius-md);
+              margin-bottom: var(--spacing-lg);
+            "
+          >
+            <div
+              style="
+                display: flex;
+                justify-content: space-between;
+                font-size: 18px;
+                font-weight: 700;
+                color: var(--primary);
+              "
+            >
+              <span>Total de Compra:</span>
+              <span id="totalRecepcion">$0</span>
+            </div>
+          </div>
+
+          <div
+            style="
+              display: flex;
+              gap: var(--spacing-md);
+              justify-content: flex-end;
+            "
+          >
+            <button
+              type="button"
+              class="btn-secondary"
+              onclick="closeModalRecepcion()"
+            >
+              Cancelar
+            </button>
+            <button
+              type="submit"
+              class="btn-primary"
+              style="background: var(--success)"
+            >
+              ✅ Registrar Recepción
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div id="modalAgregarProductoRecepcion" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>Agregar Producto a Recepción</h3>
+          <button
+            class="btn-close"
+            onclick="closeModalAgregarProductoRecepcion()"
+          >
+            ×
+          </button>
+        </div>
+        <form id="formAgregarProductoRecepcion">
+          <div class="form-group">
+            <label>Buscar producto</label>
+            <input
+              type="text"
+              id="searchProductoRecepcion"
+              placeholder="Nombre o código..."
+              oninput="buscarProductosRecepcion()"
+            />
+          </div>
+          <div class="form-group">
+            <label>Producto *</label>
+            <select
+              id="selectProductoRecepcion"
+              required
+              onchange="cargarInfoProductoRecepcion()"
+            >
+              <option value="">Seleccione...</option>
+            </select>
+          </div>
+          <div id="infoProductoRecepcion" class="hidden">
+            <div class="form-row">
+              <div class="form-group">
+                <label>Cantidad *</label>
+                <input
+                  type="number"
+                  id="cantidadRecepcion"
+                  min="1"
+                  value="1"
+                  required
+                />
+              </div>
+              <div class="form-group">
+                <label>Precio de Compra *</label>
+                <input
+                  type="number"
+                  id="precioCompraRecepcion"
+                  step="0.01"
+                  required
+                />
+              </div>
+            </div>
+          </div>
+          <div
+            style="
+              display: flex;
+              gap: var(--spacing-md);
+              justify-content: flex-end;
+              margin-top: var(--spacing-lg);
+            "
+          >
+            <button
+              type="button"
+              class="btn-secondary"
+              onclick="closeModalAgregarProductoRecepcion()"
+            >
+              Cancelar
+            </button>
+            <button type="submit" class="btn-primary">➕ Agregar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div id="modalDetalleRecepcion" class="modal">
+      <div class="modal-content" style="max-width: 600px">
+        <div class="modal-header">
+          <h3>Detalle de Recepción</h3>
+          <button class="btn-close" onclick="closeModalDetalleRecepcion()">
+            ×
+          </button>
+        </div>
+        <div id="detalleRecepcionContent"></div>
+      </div>
+    </div>
+
     <div id="toast" class="toast"></div>
     <script>
       const API_URL = `${window.location.protocol}//${window.location.host}/api`;
@@ -2053,25 +2785,26 @@
       // ====================================
 
       function initDarkMode() {
-        const prefersDark = localStorage.getItem('darkMode') === 'true' || 
-                           window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const prefersDark =
+          localStorage.getItem("darkMode") === "true" ||
+          window.matchMedia("(prefers-color-scheme: dark)").matches;
         if (prefersDark) {
-          document.body.classList.add('dark-mode');
+          document.body.classList.add("dark-mode");
           updateThemeIcon();
         }
       }
 
       function toggleDarkMode() {
-        document.body.classList.toggle('dark-mode');
-        const isDarkMode = document.body.classList.contains('dark-mode');
-        localStorage.setItem('darkMode', isDarkMode);
+        document.body.classList.toggle("dark-mode");
+        const isDarkMode = document.body.classList.contains("dark-mode");
+        localStorage.setItem("darkMode", isDarkMode);
         updateThemeIcon();
       }
 
       function updateThemeIcon() {
-        const icon = document.getElementById('themeIcon');
-        const isDark = document.body.classList.contains('dark-mode');
-        icon.textContent = isDark ? '☀️' : '🌙';
+        const icon = document.getElementById("themeIcon");
+        const isDark = document.body.classList.contains("dark-mode");
+        icon.textContent = isDark ? "☀️" : "🌙";
       }
 
       // ====================================
@@ -2232,7 +2965,6 @@
           .substring(0, 2);
         avatarContainer.textContent = iniciales;
       }
-
       function showDashboard() {
         document.getElementById("loginPage").style.display = "none";
         document.getElementById("dashboardPage").style.display = "block";
@@ -2241,13 +2973,33 @@
         document.getElementById("facturacionView").classList.add("hidden");
         document.getElementById("historialView").classList.add("hidden");
         document.getElementById("reportesView").classList.add("hidden");
+        document.getElementById("usuariosView").classList.add("hidden");
+        document.getElementById("recepcionesView").classList.add("hidden");
+        document.getElementById("movimientosView").classList.add("hidden");
+
         if (currentUser) {
           document.getElementById("userName").textContent = currentUser.nombre;
           document.getElementById(
             "userRole"
           ).textContent = `Rol: ${currentUser.rol}`;
+
+          // Reportes: acceso para administrador y gerente
           document.getElementById("btnReportes").style.display =
+            currentUser.rol === "administrador" || currentUser.rol === "gerente"
+              ? "block"
+              : "none";
+
+          // Usuarios: solo administrador
+          document.getElementById("btnUsuarios").style.display =
             currentUser.rol === "administrador" ? "block" : "none";
+
+          // Recepciones: acceso para administrador y gerente
+          document.getElementById("btnRecepciones").style.display =
+            currentUser.rol === "administrador" || currentUser.rol === "gerente"
+              ? "block"
+              : "none";
+
+          // No necesita restricción de rol para Movimientos, todos pueden ver
           actualizarAvatar(currentUser);
           loadDashboardData();
         }
@@ -2257,7 +3009,11 @@
         hideAllViews();
         document.getElementById("productosView").classList.remove("hidden");
         loadProductos();
-        if (currentUser.rol !== "administrador") {
+        // Permitir crear/editar productos a administrador y gerente
+        if (
+          currentUser.rol !== "administrador" &&
+          currentUser.rol !== "gerente"
+        ) {
           document.getElementById("btnNuevoProducto").style.display = "none";
         }
       }
@@ -2277,7 +3033,10 @@
       }
 
       function showReportes() {
-        if (currentUser.rol === "administrador") {
+        if (
+          currentUser.rol === "administrador" ||
+          currentUser.rol === "gerente"
+        ) {
           hideAllViews();
           document.getElementById("reportesView").classList.remove("hidden");
           const hoy = new Date();
@@ -2288,11 +3047,7 @@
             hace30dias;
           cargarReportes();
         } else {
-          showAlert(
-            "loginAlert",
-            "❌ Acceso denegado. Solo administradores",
-            "error"
-          );
+          showAlert("loginAlert", "❌ Acceso denegado", "error");
         }
       }
 
@@ -2302,6 +3057,9 @@
         document.getElementById("facturacionView").classList.add("hidden");
         document.getElementById("historialView").classList.add("hidden");
         document.getElementById("reportesView").classList.add("hidden");
+        document.getElementById("usuariosView").classList.add("hidden");
+        document.getElementById("recepcionesView").classList.add("hidden");
+        document.getElementById("movimientosView").classList.add("hidden"); // 👈 AGREGAR
       }
 
       // ====================================
@@ -2335,7 +3093,7 @@
         const cardStock = document.getElementById("cardStockBajo");
         const stockBajo = parseInt(data.productos_bajo_stock) || 0;
         const totalProductos = parseInt(data.total_productos) || 1;
-        
+
         if (stockBajo > 0) {
           cardStock.classList.add("stock-alert");
           const stockAlert = document.getElementById("stockAlertChart");
@@ -2343,7 +3101,7 @@
           stockAlert.innerHTML = `
             <div style="font-size: 28px; margin-bottom: 8px;">⚠️</div>
             <div style="color: var(--text-primary); font-weight: 600; font-size: 13px;">
-              ${stockBajo} producto${stockBajo > 1 ? 's' : ''} en stock bajo<br>
+              ${stockBajo} producto${stockBajo > 1 ? "s" : ""} en stock bajo<br>
               (${porcentaje}% del inventario)
             </div>
           `;
@@ -2358,9 +3116,9 @@
 
         // ===== VENTAS POR HORARIO =====
         const ventasHoy = parseInt(data.ventas_hoy) || 0;
-        
+
         let ventasMañana, ventasTarde, ventasNoche;
-        
+
         if (ventasHoy === 0) {
           ventasMañana = 0;
           ventasTarde = 0;
@@ -2371,31 +3129,37 @@
           ventasNoche = 0;
         } else {
           ventasMañana = Math.max(1, Math.floor(ventasHoy * 0.25));
-          ventasTarde = Math.max(1, Math.floor(ventasHoy * 0.40));
+          ventasTarde = Math.max(1, Math.floor(ventasHoy * 0.4));
           ventasNoche = Math.max(1, ventasHoy - ventasMañana - ventasTarde);
         }
-        
+
         const maxVentas = Math.max(ventasMañana, ventasTarde, ventasNoche, 1);
-        
-        const heightMañana = ventasMañana > 0 ? (ventasMañana / maxVentas * 70) : 5;
-        document.getElementById("ventaMañana").style.height = heightMañana + "%";
+
+        const heightMañana =
+          ventasMañana > 0 ? (ventasMañana / maxVentas) * 70 : 5;
+        document.getElementById("ventaMañana").style.height =
+          heightMañana + "%";
         document.getElementById("ventaMañana").innerHTML = `
           <span style="position: absolute; top: -20px; left: 50%; transform: translateX(-50%); font-size: 10px; font-weight: 600; color: #f59e0b;">🌅 ${ventasMañana}</span>
         `;
-        
-        const heightTarde = ventasTarde > 0 ? (ventasTarde / maxVentas * 70) : 5;
+
+        const heightTarde =
+          ventasTarde > 0 ? (ventasTarde / maxVentas) * 70 : 5;
         document.getElementById("ventaTarde").style.height = heightTarde + "%";
         document.getElementById("ventaTarde").innerHTML = `
           <span style="position: absolute; top: -20px; left: 50%; transform: translateX(-50%); font-size: 10px; font-weight: 600; color: #3b82f6;">☀️ ${ventasTarde}</span>
         `;
-        
-        const heightNoche = ventasNoche > 0 ? (ventasNoche / maxVentas * 70) : 5;
+
+        const heightNoche =
+          ventasNoche > 0 ? (ventasNoche / maxVentas) * 70 : 5;
         document.getElementById("ventaNoche").style.height = heightNoche + "%";
         document.getElementById("ventaNoche").innerHTML = `
           <span style="position: absolute; top: -20px; left: 50%; transform: translateX(-50%); font-size: 10px; font-weight: 600; color: #9333ea;">🌙 ${ventasNoche}</span>
         `;
 
-        const barsMonto = document.querySelectorAll("#chartMonto .stat-chart-bar");
+        const barsMonto = document.querySelectorAll(
+          "#chartMonto .stat-chart-bar"
+        );
         if (barsMonto.length > 0) {
           const monto = parseFloat(data.monto_ventas_hoy) || 0;
           const valores = [];
@@ -2443,10 +3207,14 @@
             const badge = stockBajo
               ? '<span class="badge badge-warning">⚠️ Stock Bajo</span>'
               : '<span class="badge badge-success">✅ Normal</span>';
+
+            // Permitir editar/eliminar a administrador y gerente
             const acciones =
-              currentUser.rol === "administrador"
+              currentUser.rol === "administrador" ||
+              currentUser.rol === "gerente"
                 ? `<button class="btn-icon" onclick="editarProducto(${p.id})">✏️</button><button class="btn-icon" onclick="eliminarProducto(${p.id})">🗑️</button>`
                 : "-";
+
             return `<tr><td><strong>${p.codigo}</strong></td><td>${
               p.nombre
             }</td><td>${p.categoria || "-"}</td><td><strong>${parseFloat(
@@ -2654,16 +3422,26 @@
       // FACTURACIÓN
       // ====================================
 
-      function showModalAgregarProducto() {
+      async function showModalAgregarProducto() {
         document.getElementById("modalAgregarProducto").style.display = "flex";
-        loadProductos();
+
+        // Cargar productos si no están cargados
+        if (productos.length === 0) {
+          await loadProductos();
+        }
+
+        // Listar TODOS los productos inmediatamente
         const select = document.getElementById("selectProductoVenta");
         select.innerHTML =
-          '<option value="">Seleccione...</option>' +
+          '<option value="">Seleccione un producto...</option>' +
           productos
             .map(
               (p) =>
-                `<option value="${p.id}">${p.nombre} - ${p.precio_venta}</option>`
+                `<option value="${p.id}">${p.nombre} (${
+                  p.codigo
+                }) - $${parseFloat(p.precio_venta).toLocaleString(
+                  "es-CO"
+                )}</option>`
             )
             .join("");
       }
@@ -2757,25 +3535,25 @@
         container.innerHTML = productosVenta
           .map(
             (item, index) => `
-          <div class="item-venta">
-            <div class="item-info"><h4>${
+      <div class="item-venta">
+        <div class="item-info"><h4>${
           item.nombre
         }</h4><p>${item.precio_unitario.toLocaleString("es-CO")}</p></div>
-            <div class="item-cantidad">
-              <button type="button" onclick="cambiarCantidad(${index}, -1)">-</button>
-              <input type="number" value="${
+        <div class="item-cantidad">
+          <button type="button" onclick="cambiarCantidad(${index}, -1)">-</button>
+          <input type="number" value="${
             item.cantidad
           }" onchange="actualizarCantidad(${index}, this.value)" min="1" max="${
               item.stock_disponible
             }">
-              <button type="button" onclick="cambiarCantidad(${index}, 1)">+</button>
-            </div>
-            <div><strong>${(item.precio_unitario * item.cantidad).toLocaleString(
+          <button type="button" onclick="cambiarCantidad(${index}, 1)">+</button>
+        </div>
+        <div><strong>${(item.precio_unitario * item.cantidad).toLocaleString(
           "es-CO"
         )}</strong></div>
-            <button class="btn-icon" onclick="eliminarProductoVenta(${index})">🗑️</button>
-          </div>
-        `
+        <button class="btn-icon" onclick="eliminarProductoVenta(${index})">🗑️</button>
+      </div>
+    `
           )
           .join("");
         calcularTotales();
@@ -2814,13 +3592,71 @@
         const total = subtotal - descuento;
         document.getElementById(
           "subtotalVenta"
-        ).textContent = `${subtotal.toLocaleString("es-CO")}`;
+        ).textContent = `$${subtotal.toLocaleString("es-CO")}`;
         document.getElementById(
           "descuentoVenta"
-        ).textContent = `${descuento.toLocaleString("es-CO")}`;
+        ).textContent = `$${descuento.toLocaleString("es-CO")}`;
         document.getElementById(
           "totalVenta"
-        ).textContent = `${total.toLocaleString("es-CO")}`;
+        ).textContent = `$${total.toLocaleString("es-CO")}`;
+
+        // Recalcular cambio si está en efectivo
+        if (document.getElementById("metodoPago").value === "efectivo") {
+          calcularCambio();
+        }
+      }
+
+      // 👇 NUEVAS FUNCIONES PARA MANEJAR EFECTIVO Y CAMBIO
+
+      function toggleMontoRecibido() {
+        const metodoPago = document.getElementById("metodoPago").value;
+        const campoMonto = document.getElementById("campoMontoRecibido");
+        const campoCambio = document.getElementById("campoCambio");
+
+        if (metodoPago === "efectivo") {
+          campoMonto.style.display = "block";
+          document.getElementById("montoRecibido").required = true;
+        } else {
+          campoMonto.style.display = "none";
+          campoCambio.classList.add("hidden");
+          document.getElementById("montoRecibido").required = false;
+          document.getElementById("montoRecibido").value = "";
+        }
+      }
+
+      function calcularCambio() {
+        const montoRecibido =
+          parseFloat(document.getElementById("montoRecibido").value) || 0;
+        const totalText = document
+          .getElementById("totalVenta")
+          .textContent.replace(/\$/g, "")
+          .replace(/\./g, "")
+          .replace(/,/g, "");
+        const total = parseFloat(totalText) || 0;
+
+        if (montoRecibido > 0) {
+          const cambio = montoRecibido - total;
+
+          if (cambio >= 0) {
+            document.getElementById("campoCambio").classList.remove("hidden");
+            document.getElementById(
+              "cambioDevolver"
+            ).textContent = `$${cambio.toLocaleString("es-CO")}`;
+            document.getElementById("campoCambio").style.background =
+              "var(--success)";
+          } else {
+            document.getElementById("campoCambio").classList.remove("hidden");
+            document.getElementById(
+              "cambioDevolver"
+            ).textContent = `Falta: $${Math.abs(cambio).toLocaleString(
+              "es-CO"
+            )}`;
+            document.getElementById("campoCambio").style.background =
+              "var(--danger)";
+          }
+        } else {
+          document.getElementById("campoCambio").classList.add("hidden");
+        }
       }
 
       async function procesarVenta() {
@@ -2832,14 +3668,47 @@
           );
           return;
         }
+
+        // 👇 VALIDACIÓN PARA EFECTIVO
+        const metodoPago = document.getElementById("metodoPago").value;
+        if (metodoPago === "efectivo") {
+          const montoRecibido =
+            parseFloat(document.getElementById("montoRecibido").value) || 0;
+          const totalText = document
+            .getElementById("totalVenta")
+            .textContent.replace(/\$/g, "")
+            .replace(/\./g, "")
+            .replace(/,/g, "");
+          const total = parseFloat(totalText) || 0;
+
+          if (montoRecibido === 0) {
+            showAlert(
+              "loginAlert",
+              "❌ Debe ingresar el monto recibido",
+              "error"
+            );
+            return;
+          }
+
+          if (montoRecibido < total) {
+            showAlert(
+              "loginAlert",
+              "❌ El monto recibido es insuficiente",
+              "error"
+            );
+            return;
+          }
+        }
+
         const data = {
           id_cliente: document.getElementById("selectCliente").value || null,
           productos: productosVenta,
-          metodo_pago: document.getElementById("metodoPago").value,
+          metodo_pago: metodoPago,
           observaciones: document.getElementById("observaciones").value,
           impuesto: 0,
           descuento: 0,
         };
+
         try {
           const response = await fetch(`${API_URL}/facturas`, {
             method: "POST",
@@ -2849,19 +3718,39 @@
           });
           if (response.ok) {
             const result = await response.json();
-            showAlert(
-              "loginAlert",
-              `✅ Venta exitosa! Factura: ${result.numero_factura}`,
-              "exito"
-            );
+
+            // 👇 MOSTRAR CAMBIO EN LA ALERTA SI ES EFECTIVO
+            let mensaje = `✅ Venta exitosa! Factura: ${result.numero_factura}`;
+            if (metodoPago === "efectivo") {
+              const montoRecibido = parseFloat(
+                document.getElementById("montoRecibido").value
+              );
+              const cambio = montoRecibido - result.total;
+              if (cambio > 0) {
+                mensaje += `\n💰 Cambio: $${cambio.toLocaleString("es-CO")}`;
+              }
+            }
+
+            showAlert("loginAlert", mensaje, "exito");
+
+            // Limpiar formulario
             productosVenta = [];
             renderProductosVenta();
+            document.getElementById("montoRecibido").value = "";
+            document.getElementById("campoCambio").classList.add("hidden");
+            document.getElementById("selectCliente").value = "";
+            document.getElementById("observaciones").value = "";
             loadDashboardData();
           }
         } catch (error) {
           showAlert("loginAlert", "❌ Error al procesar la venta", "error");
         }
       }
+
+      // Inicializar al cargar la página de facturación
+      document.addEventListener("DOMContentLoaded", function () {
+        toggleMontoRecibido(); // Ocultar campo de monto al inicio
+      });
 
       // ====================================
       // HISTORIAL
@@ -2917,25 +3806,27 @@
           <tr>
             <td><strong>${f.numero_factura}</strong></td>
             <td>${new Date(f.fecha).toLocaleDateString("es-CO", {
-          year: "numeric",
-          month: "short",
-          day: "numeric",
-          hour: "2-digit",
-          minute: "2-digit",
-        })}</td>
+              year: "numeric",
+              month: "short",
+              day: "numeric",
+              hour: "2-digit",
+              minute: "2-digit",
+            })}</td>
             <td><span class="badge ${horarioBadges[f.horario]}">${
               horarioIconos[f.horario]
             } ${
               f.horario.charAt(0).toUpperCase() + f.horario.slice(1)
             }</span></td>
             <td>${f.nombre_cliente || "General"}</td>
-            <td><strong>${parseFloat(f.total).toLocaleString("es-CO")}</strong></td>
+            <td><strong>${parseFloat(f.total).toLocaleString(
+              "es-CO"
+            )}</strong></td>
             <td>${
-          f.metodo_pago.charAt(0).toUpperCase() + f.metodo_pago.slice(1)
-        }</td>
+              f.metodo_pago.charAt(0).toUpperCase() + f.metodo_pago.slice(1)
+            }</td>
             <td><button class="btn-icon" onclick="verDetalleFactura(${
-          f.id
-        })">👁️</button></td>
+              f.id
+            })">👁️</button></td>
           </tr>
         `
           )
@@ -2961,14 +3852,26 @@
           <div style="padding: 0;">
             <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 12px; border-radius: 8px; color: white; margin-bottom: 12px;">
               <h4 style="margin: 0;">Factura: ${f.numero_factura}</h4>
-              <p style="margin: 4px 0; font-size: 12px;">📅 ${new Date(f.fecha).toLocaleString("es-CO")}</p>
+              <p style="margin: 4px 0; font-size: 12px;">📅 ${new Date(
+                f.fecha
+              ).toLocaleString("es-CO")}</p>
               <p style="margin: 4px 0; font-size: 12px;">⏰ ${f.horario.toUpperCase()}</p>
             </div>
             <div style="background: var(--bg-secondary); padding: 10px; border-radius: 6px; margin-bottom: 12px; font-size: 12px;">
-              <p style="margin: 3px 0;"><strong>👤 Cliente:</strong> ${f.nombre_cliente || "General"}</p>
-              ${f.numero_documento ? `<p style="margin: 3px 0;"><strong>📄 Doc:</strong> ${f.numero_documento}</p>` : ""}
-              <p style="margin: 3px 0;"><strong>💳 Pago:</strong> ${f.metodo_pago}</p>
-              <p style="margin: 3px 0;"><strong>👨‍💼 Vendedor:</strong> ${f.nombre_usuario}</p>
+              <p style="margin: 3px 0;"><strong>👤 Cliente:</strong> ${
+                f.nombre_cliente || "General"
+              }</p>
+              ${
+                f.numero_documento
+                  ? `<p style="margin: 3px 0;"><strong>📄 Doc:</strong> ${f.numero_documento}</p>`
+                  : ""
+              }
+              <p style="margin: 3px 0;"><strong>💳 Pago:</strong> ${
+                f.metodo_pago
+              }</p>
+              <p style="margin: 3px 0;"><strong>👨‍💼 Vendedor:</strong> ${
+                f.nombre_usuario
+              }</p>
             </div>
             <h4 style="font-size: 13px; margin: 8px 0 6px 0;">🛒 Productos:</h4>
             <table style="width:100%; margin: 8px 0; font-size: 11px; border-collapse: collapse;">
@@ -2985,10 +3888,20 @@
                   .map(
                     (d) =>
                       `<tr style="border-bottom: 1px solid var(--border);">
-                    <td style="padding: 4px;"><strong>${d.nombre_producto}</strong><br><small style="color: var(--text-secondary);">${d.codigo}</small></td>
-                    <td style="padding: 4px; text-align: center;">${d.cantidad}</td>
-                    <td style="padding: 4px; text-align: right;">$${parseFloat(d.precio_unitario).toLocaleString("es-CO")}</td>
-                    <td style="padding: 4px; text-align: right;"><strong>$${parseFloat(d.subtotal).toLocaleString("es-CO")}</strong></td>
+                    <td style="padding: 4px;"><strong>${
+                      d.nombre_producto
+                    }</strong><br><small style="color: var(--text-secondary);">${
+                        d.codigo
+                      }</small></td>
+                    <td style="padding: 4px; text-align: center;">${
+                      d.cantidad
+                    }</td>
+                    <td style="padding: 4px; text-align: right;">$${parseFloat(
+                      d.precio_unitario
+                    ).toLocaleString("es-CO")}</td>
+                    <td style="padding: 4px; text-align: right;"><strong>$${parseFloat(
+                      d.subtotal
+                    ).toLocaleString("es-CO")}</strong></td>
                   </tr>`
                   )
                   .join("")}
@@ -3000,7 +3913,11 @@
                 <span>$${parseFloat(f.total).toLocaleString("es-CO")}</span>
               </div>
             </div>
-            ${f.observaciones ? `<div style="margin-top: 10px; padding: 8px; background: var(--bg-tertiary); border-radius: 6px; font-size: 12px;"><strong>📝 Obs:</strong> ${f.observaciones}</div>` : ""}
+            ${
+              f.observaciones
+                ? `<div style="margin-top: 10px; padding: 8px; background: var(--bg-tertiary); border-radius: 6px; font-size: 12px;"><strong>📝 Obs:</strong> ${f.observaciones}</div>`
+                : ""
+            }
           </div>
         `;
         document.getElementById("detalleFacturaContent").innerHTML = content;
@@ -3010,6 +3927,87 @@
       function closeModalDetalle() {
         document.getElementById("modalDetalleFactura").style.display = "none";
         document.getElementById("detalleFacturaContent").innerHTML = "";
+      }
+
+      // ====================================
+      // FUNCIONES PARA IMPRIMIR Y GUARDAR PDF
+      // ====================================
+
+      function imprimirFactura() {
+        const contenido = document.getElementById(
+          "detalleFacturaContent"
+        ).innerHTML;
+        const ventanaImpresion = window.open(
+          "",
+          "PRINT",
+          "width=800,height=600"
+        );
+
+        ventanaImpresion.document.write(`
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset="UTF-8">
+      <title>Imprimir Factura</title>
+      <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; padding: 20px; color: #333; }
+        table { width: 100%; border-collapse: collapse; margin: 10px 0; }
+        th { background: #f5f5f5; padding: 8px; text-align: left; border-bottom: 2px solid #ddd; }
+        td { padding: 8px; border-bottom: 1px solid #eee; }
+        @media print { body { padding: 10px; } }
+      </style>
+    </head>
+    <body>
+      ${contenido}
+      <script>
+        window.onload = function() {
+          setTimeout(() => window.print(), 250);
+        };
+        window.onafterprint = function() {
+          window.close();
+        };
+      <\/script>
+    </body>
+    </html>
+  `);
+
+        ventanaImpresion.document.close();
+      }
+
+      function guardarFacturaPDF() {
+        const contenido = document.getElementById("detalleFacturaContent");
+        const numeroFactura =
+          contenido.innerHTML.match(/Factura: ([A-Z0-9-]+)/)?.[1] || "factura";
+
+        // Configuración para html2pdf
+        const opt = {
+          margin: 10,
+          filename: `Factura-${numeroFactura}.pdf`,
+          image: { type: "jpeg", quality: 0.98 },
+          html2canvas: {
+            scale: 2,
+            useCORS: true,
+            letterRendering: true,
+          },
+          jsPDF: {
+            unit: "mm",
+            format: "a4",
+            orientation: "portrait",
+          },
+        };
+
+        // Generar y descargar PDF
+        html2pdf()
+          .set(opt)
+          .from(contenido)
+          .save()
+          .then(() => {
+            showAlert("loginAlert", "✅ PDF descargado exitosamente", "exito");
+          })
+          .catch(() => {
+            showAlert("loginAlert", "❌ Error al generar PDF", "error");
+          });
       }
 
       // ====================================
@@ -3094,7 +4092,9 @@
           .map(
             (h) => `
           <div class="stat-horario ${h.horario}">
-            <div style="font-size: 24px; margin-bottom: 8px;">${iconos[h.horario]}</div>
+            <div style="font-size: 24px; margin-bottom: 8px;">${
+              iconos[h.horario]
+            }</div>
             <h4 style="margin: 0; text-transform: capitalize;">${h.horario}</h4>
             <div class="valor">${h.monto_total.toLocaleString("es-CO")}</div>
             <div style="font-size: 12px; opacity: 0.9;">
@@ -3176,11 +4176,15 @@
           </div>
           <div class="resumen-item">
             <h5>💵 Efectivo</h5>
-            <div class="valor">${data.efectivo?.toLocaleString("es-CO") || "0"}</div>
+            <div class="valor">${
+              data.efectivo?.toLocaleString("es-CO") || "0"
+            }</div>
           </div>
           <div class="resumen-item">
             <h5>💳 Tarjeta</h5>
-            <div class="valor">${data.tarjeta?.toLocaleString("es-CO") || "0"}</div>
+            <div class="valor">${
+              data.tarjeta?.toLocaleString("es-CO") || "0"
+            }</div>
           </div>
           <div class="resumen-item">
             <h5>🏦 Transferencia</h5>
@@ -3318,6 +4322,699 @@
         `;
           })
           .join("");
+      }
+
+      // ====================================
+      // GESTIÓN DE USUARIOS
+      // ====================================
+
+      let usuarios = [];
+
+      async function loadUsuarios() {
+        try {
+          const response = await fetch(`${API_URL}/usuarios`, {
+            credentials: "include",
+          });
+          if (response.ok) {
+            usuarios = await response.json();
+            renderUsuarios();
+          }
+        } catch (error) {
+          console.error("Error:", error);
+        }
+      }
+
+      function renderUsuarios() {
+        const tbody = document.getElementById("usuariosTable");
+        if (usuarios.length === 0) {
+          tbody.innerHTML =
+            '<tr><td colspan="5" style="text-align: center; padding: 40px;">No hay usuarios registrados</td></tr>';
+          return;
+        }
+
+        tbody.innerHTML = usuarios
+          .map((u) => {
+            const rolBadge = {
+              administrador:
+                '<span class="badge badge-danger">👑 Administrador</span>',
+              vendedor: '<span class="badge badge-info">🛒 Vendedor</span>',
+              gerente: '<span class="badge badge-warning">📊 Gerente</span>',
+            };
+
+            const estadoBadge = u.activo
+              ? '<span class="badge badge-success">✅ Activo</span>'
+              : '<span class="badge badge-danger">❌ Inactivo</span>';
+
+            return `
+              <tr>
+                <td><strong>${u.username}</strong></td>
+                <td>${u.nombre_completo}</td>
+                <td>${rolBadge[u.rol] || u.rol}</td>
+                <td>${estadoBadge}</td>
+                <td>
+                  <button class="btn-icon" onclick="editarUsuario(${
+                    u.id
+                  })" title="Editar">✏️</button>
+                  <button class="btn-icon" onclick="toggleUsuarioEstado(${
+                    u.id
+                  }, ${u.activo})" title="${
+              u.activo ? "Desactivar" : "Activar"
+            }">
+                    ${u.activo ? "🔒" : "🔓"}
+                  </button>
+                </td>
+              </tr>
+            `;
+          })
+          .join("");
+      }
+
+      function showUsuarios() {
+        if (currentUser.rol !== "administrador") {
+          showAlert(
+            "loginAlert",
+            "❌ Acceso denegado. Solo administradores",
+            "error"
+          );
+          return;
+        }
+        hideAllViews();
+        document.getElementById("usuariosView").classList.remove("hidden");
+        loadUsuarios();
+      }
+
+      function showModalUsuario(usuario = null) {
+        document.getElementById("modalUsuario").style.display = "flex";
+
+        if (usuario) {
+          document.getElementById("modalUsuarioTitle").textContent =
+            "Editar Usuario";
+          document.getElementById("usuarioId").value = usuario.id;
+          document.getElementById("usuarioNombre").value =
+            usuario.nombre_completo;
+          document.getElementById("usuarioUsername").value = usuario.username;
+          document.getElementById("usuarioUsername").disabled = true;
+          document.getElementById("usuarioPassword").required = false;
+          document.getElementById("usuarioPassword").placeholder =
+            "Dejar en blanco para no cambiar";
+          document.getElementById("usuarioRol").value = usuario.rol;
+        } else {
+          document.getElementById("modalUsuarioTitle").textContent =
+            "Nuevo Usuario";
+          document.getElementById("formUsuario").reset();
+          document.getElementById("usuarioId").value = "";
+          document.getElementById("usuarioUsername").disabled = false;
+          document.getElementById("usuarioPassword").required = true;
+          document.getElementById("usuarioPassword").placeholder =
+            "Mínimo 6 caracteres";
+        }
+      }
+
+      function closeModalUsuario() {
+        document.getElementById("modalUsuario").style.display = "none";
+        document.getElementById("formUsuario").reset();
+      }
+
+      document
+        .getElementById("formUsuario")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+
+          const id = document.getElementById("usuarioId").value;
+          const password = document.getElementById("usuarioPassword").value;
+
+          const data = {
+            nombre_completo: document.getElementById("usuarioNombre").value,
+            username: document.getElementById("usuarioUsername").value,
+            rol: document.getElementById("usuarioRol").value,
+          };
+
+          // Solo incluir password si se ingresó uno nuevo
+          if (password) {
+            data.password = password;
+          }
+
+          try {
+            const url = id
+              ? `${API_URL}/usuarios/${id}`
+              : `${API_URL}/usuarios`;
+            const method = id ? "PUT" : "POST";
+
+            const response = await fetch(url, {
+              method,
+              headers: { "Content-Type": "application/json" },
+              credentials: "include",
+              body: JSON.stringify(data),
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+              closeModalUsuario();
+              loadUsuarios();
+              showAlert(
+                "loginAlert",
+                id ? "✅ Usuario actualizado" : "✅ Usuario creado",
+                "exito"
+              );
+            } else {
+              showAlert("loginAlert", `❌ ${result.error}`, "error");
+            }
+          } catch (error) {
+            showAlert("loginAlert", "❌ Error de conexión", "error");
+          }
+        });
+
+      async function editarUsuario(id) {
+        const usuario = usuarios.find((u) => u.id === id);
+        if (usuario) showModalUsuario(usuario);
+      }
+
+      async function toggleUsuarioEstado(id, estadoActual) {
+        const accion = estadoActual ? "desactivar" : "activar";
+
+        mostrarConfirmacion(
+          `¿Está seguro de ${accion} este usuario?`,
+          async () => {
+            try {
+              const response = await fetch(`${API_URL}/usuarios/${id}/toggle`, {
+                method: "PATCH",
+                credentials: "include",
+              });
+
+              if (response.ok) {
+                loadUsuarios();
+                showAlert(
+                  "loginAlert",
+                  `✅ Usuario ${
+                    accion === "desactivar" ? "desactivado" : "activado"
+                  }`,
+                  "exito"
+                );
+              }
+            } catch (error) {
+              showAlert("loginAlert", "❌ Error al cambiar estado", "error");
+            }
+          }
+        );
+      }
+
+      // ====================================
+      // RECEPCIONES DE INVENTARIO
+      // ====================================
+
+      let productosRecepcion = [];
+
+      async function loadRecepciones(fechaInicio = "", fechaFin = "") {
+        try {
+          let url = `${API_URL}/recepciones?`;
+          if (fechaInicio) url += `fecha_inicio=${fechaInicio}&`;
+          if (fechaFin) url += `fecha_fin=${fechaFin}`;
+
+          const response = await fetch(url, { credentials: "include" });
+          if (response.ok) {
+            const recepciones = await response.json();
+            renderRecepciones(recepciones);
+          }
+        } catch (error) {
+          console.error("Error:", error);
+        }
+      }
+
+      function renderRecepciones(recepciones) {
+        const tbody = document.getElementById("recepcionesTable");
+        if (recepciones.length === 0) {
+          tbody.innerHTML =
+            '<tr><td colspan="7" style="text-align: center; padding: 40px;">Sin recepciones registradas</td></tr>';
+          return;
+        }
+
+        tbody.innerHTML = recepciones
+          .map(
+            (r) => `
+      <tr>
+        <td><strong>${r.numero_recepcion}</strong></td>
+        <td>${new Date(r.fecha).toLocaleDateString("es-CO", {
+          year: "numeric",
+          month: "short",
+          day: "numeric",
+        })}</td>
+        <td>${r.proveedor}</td>
+        <td>${r.total_productos} productos</td>
+        <td><strong>$${parseFloat(r.total).toLocaleString(
+          "es-CO"
+        )}</strong></td>
+        <td>${r.nombre_usuario}</td>
+        <td><button class="btn-icon" onclick="verDetalleRecepcion(${
+          r.id
+        })">👁️</button></td>
+      </tr>
+    `
+          )
+          .join("");
+      }
+      function showRecepciones() {
+        if (
+          currentUser.rol !== "administrador" &&
+          currentUser.rol !== "gerente"
+        ) {
+          showAlert("loginAlert", "❌ Acceso denegado", "error");
+          return;
+        }
+        hideAllViews();
+        document.getElementById("recepcionesView").classList.remove("hidden");
+        loadRecepciones();
+      }
+
+      function buscarRecepciones() {
+        const fechaInicio = document.getElementById(
+          "recepcionFechaInicio"
+        ).value;
+        const fechaFin = document.getElementById("recepcionFechaFin").value;
+        loadRecepciones(fechaInicio, fechaFin);
+      }
+
+      async function showModalRecepcion() {
+        if (productos.length === 0) {
+          await loadProductos();
+        }
+        document.getElementById("modalRecepcion").style.display = "flex";
+        productosRecepcion = [];
+        renderProductosRecepcion();
+      }
+
+      function closeModalRecepcion() {
+        document.getElementById("modalRecepcion").style.display = "none";
+        document.getElementById("formRecepcion").reset();
+        productosRecepcion = [];
+        renderProductosRecepcion();
+      }
+
+      async function showModalAgregarProductoRecepcion() {
+        if (productos.length === 0) {
+          await loadProductos();
+        }
+
+        document.getElementById("modalAgregarProductoRecepcion").style.display =
+          "flex";
+        const select = document.getElementById("selectProductoRecepcion");
+        select.innerHTML =
+          '<option value="">Seleccione...</option>' +
+          productos
+            .map(
+              (p) =>
+                `<option value="${p.id}">${p.nombre} (${p.codigo})</option>`
+            )
+            .join("");
+      }
+
+      function closeModalAgregarProductoRecepcion() {
+        document.getElementById("modalAgregarProductoRecepcion").style.display =
+          "none";
+        document.getElementById("formAgregarProductoRecepcion").reset();
+        document
+          .getElementById("infoProductoRecepcion")
+          .classList.add("hidden");
+      }
+
+      function buscarProductosRecepcion() {
+        const search = document
+          .getElementById("searchProductoRecepcion")
+          .value.toLowerCase();
+        const select = document.getElementById("selectProductoRecepcion");
+        select.innerHTML =
+          '<option value="">Seleccione...</option>' +
+          productos
+            .filter(
+              (p) =>
+                p.nombre.toLowerCase().includes(search) ||
+                p.codigo.toLowerCase().includes(search)
+            )
+            .map(
+              (p) =>
+                `<option value="${p.id}">${p.nombre} (${p.codigo})</option>`
+            )
+            .join("");
+      }
+
+      function cargarInfoProductoRecepcion() {
+        const id = parseInt(
+          document.getElementById("selectProductoRecepcion").value
+        );
+        if (!id) {
+          document
+            .getElementById("infoProductoRecepcion")
+            .classList.add("hidden");
+          return;
+        }
+        const producto = productos.find((p) => p.id === id);
+        if (producto) {
+          document.getElementById("precioCompraRecepcion").value =
+            producto.precio_compra;
+          document
+            .getElementById("infoProductoRecepcion")
+            .classList.remove("hidden");
+        }
+      }
+
+      document
+        .getElementById("formAgregarProductoRecepcion")
+        .addEventListener("submit", (e) => {
+          e.preventDefault();
+          const id = parseInt(
+            document.getElementById("selectProductoRecepcion").value
+          );
+          const cantidad = parseInt(
+            document.getElementById("cantidadRecepcion").value
+          );
+          const precioCompra = parseFloat(
+            document.getElementById("precioCompraRecepcion").value
+          );
+
+          const producto = productos.find((p) => p.id === id);
+          if (!producto) return;
+
+          const existe = productosRecepcion.find((p) => p.id_producto === id);
+          if (existe) {
+            existe.cantidad += cantidad;
+            existe.precio_compra = precioCompra;
+          } else {
+            productosRecepcion.push({
+              id_producto: id,
+              nombre: producto.nombre,
+              codigo: producto.codigo,
+              cantidad: cantidad,
+              precio_compra: precioCompra,
+            });
+          }
+
+          closeModalAgregarProductoRecepcion();
+          renderProductosRecepcion();
+        });
+
+      function renderProductosRecepcion() {
+        const container = document.getElementById("productosRecepcionList");
+        if (productosRecepcion.length === 0) {
+          container.innerHTML =
+            '<p class="no-data">📦 Sin productos agregados</p>';
+          calcularTotalRecepcion();
+          return;
+        }
+
+        container.innerHTML = productosRecepcion
+          .map(
+            (item, index) => `
+      <div class="item-venta">
+        <div class="item-info">
+          <h4>${item.nombre}</h4>
+          <p>${item.codigo}</p>
+        </div>
+        <div style="display: flex; align-items: center; gap: var(--spacing-md);">
+          <div>
+            <small style="color: var(--text-secondary);">Cantidad:</small>
+            <strong>${item.cantidad}</strong>
+          </div>
+          <div>
+            <small style="color: var(--text-secondary);">P. Compra:</small>
+            <strong>$${item.precio_compra.toLocaleString("es-CO")}</strong>
+          </div>
+          <div>
+            <small style="color: var(--text-secondary);">Subtotal:</small>
+            <strong>$${(item.cantidad * item.precio_compra).toLocaleString(
+              "es-CO"
+            )}</strong>
+          </div>
+          <button class="btn-icon" onclick="eliminarProductoRecepcion(${index})">🗑️</button>
+        </div>
+      </div>
+    `
+          )
+          .join("");
+
+        calcularTotalRecepcion();
+      }
+
+      function eliminarProductoRecepcion(index) {
+        productosRecepcion.splice(index, 1);
+        renderProductosRecepcion();
+      }
+
+      function calcularTotalRecepcion() {
+        const total = productosRecepcion.reduce(
+          (sum, item) => sum + item.cantidad * item.precio_compra,
+          0
+        );
+        document.getElementById(
+          "totalRecepcion"
+        ).textContent = `$${total.toLocaleString("es-CO")}`;
+      }
+
+      document
+        .getElementById("formRecepcion")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+
+          if (productosRecepcion.length === 0) {
+            showAlert(
+              "loginAlert",
+              "❌ Debe agregar al menos un producto",
+              "error"
+            );
+            return;
+          }
+
+          const data = {
+            proveedor: document.getElementById("recepcionProveedor").value,
+            numero_documento:
+              document.getElementById("recepcionDocumento").value,
+            observaciones: document.getElementById("recepcionObservaciones")
+              .value,
+            productos: productosRecepcion,
+          };
+
+          try {
+            const response = await fetch(`${API_URL}/recepciones`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              credentials: "include",
+              body: JSON.stringify(data),
+            });
+
+            if (response.ok) {
+              const result = await response.json();
+              showAlert(
+                "loginAlert",
+                `✅ Recepción registrada! ${result.numero_recepcion}`,
+                "exito"
+              );
+              closeModalRecepcion();
+              loadRecepciones();
+              loadDashboardData();
+            } else {
+              const error = await response.json();
+              showAlert("loginAlert", `❌ ${error.error}`, "error");
+            }
+          } catch (error) {
+            showAlert("loginAlert", "❌ Error de conexión", "error");
+          }
+        });
+
+      async function verDetalleRecepcion(id) {
+        try {
+          const response = await fetch(`${API_URL}/recepciones/${id}`, {
+            credentials: "include",
+          });
+          if (response.ok) {
+            const recepcion = await response.json();
+            mostrarDetalleRecepcion(recepcion);
+          }
+        } catch (error) {
+          console.error("Error:", error);
+        }
+      }
+
+      function mostrarDetalleRecepcion(r) {
+        const content = `
+    <div style="padding: 0;">
+      <div style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); padding: 12px; border-radius: 8px; color: white; margin-bottom: 12px;">
+        <h4 style="margin: 0;">Recepción: ${r.numero_recepcion}</h4>
+        <p style="margin: 4px 0; font-size: 12px;">📅 ${new Date(
+          r.fecha
+        ).toLocaleString("es-CO")}</p>
+      </div>
+      <div style="background: var(--bg-secondary); padding: 10px; border-radius: 6px; margin-bottom: 12px; font-size: 12px;">
+        <p style="margin: 3px 0;"><strong>🏢 Proveedor:</strong> ${
+          r.proveedor
+        }</p>
+        ${
+          r.numero_documento
+            ? `<p style="margin: 3px 0;"><strong>📄 Doc:</strong> ${r.numero_documento}</p>`
+            : ""
+        }
+        <p style="margin: 3px 0;"><strong>👨‍💼 Registrado por:</strong> ${
+          r.nombre_usuario
+        }</p>
+      </div>
+      <h4 style="font-size: 13px; margin: 8px 0 6px 0;">📦 Productos Recibidos:</h4>
+      <table style="width:100%; margin: 8px 0; font-size: 11px; border-collapse: collapse;">
+        <thead style="background: var(--bg-tertiary);">
+          <tr>
+            <th style="padding: 4px; text-align: left;">Producto</th>
+            <th style="padding: 4px; text-align: center;">Cantidad</th>
+            <th style="padding: 4px; text-align: right;">P. Compra</th>
+            <th style="padding: 4px; text-align: right;">Subtotal</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${r.detalle
+            .map(
+              (d) => `
+            <tr>
+              <td style="padding: 4px;"><strong>${
+                d.nombre_producto
+              }</strong><br><small>${d.codigo}</small></td>
+              <td style="padding: 4px; text-align: center;">${d.cantidad}</td>
+              <td style="padding: 4px; text-align: right;">$${parseFloat(
+                d.precio_compra
+              ).toLocaleString("es-CO")}</td>
+              <td style="padding: 4px; text-align: right;"><strong>$${parseFloat(
+                d.subtotal
+              ).toLocaleString("es-CO")}</strong></td>
+            </tr>
+          `
+            )
+            .join("")}
+        </tbody>
+      </table>
+      <div style="padding: 10px; background: linear-gradient(135deg, #10b981 0%, #059669 100%); border-radius: 6px; color: white; margin-top: 12px;">
+        <div style="display: flex; justify-content: space-between; font-size: 13px; font-weight: bold;">
+          <span>TOTAL:</span>
+          <span>$${parseFloat(r.total).toLocaleString("es-CO")}</span>
+        </div>
+      </div>
+      ${
+        r.observaciones
+          ? `<div style="margin-top: 10px; padding: 8px; background: var(--bg-tertiary); border-radius: 6px; font-size: 12px;"><strong>📝 Obs:</strong> ${r.observaciones}</div>`
+          : ""
+      }
+    </div>
+  `;
+        document.getElementById("detalleRecepcionContent").innerHTML = content;
+        document.getElementById("modalDetalleRecepcion").style.display = "flex";
+      }
+
+      function closeModalDetalleRecepcion() {
+        document.getElementById("modalDetalleRecepcion").style.display = "none";
+      }
+
+      // ====================================
+      // MOVIMIENTOS DE INVENTARIO
+      // ====================================
+
+      async function loadMovimientos(filtros = {}) {
+        try {
+          let url = `${API_URL}/movimientos?`;
+          if (filtros.tipo) url += `tipo=${filtros.tipo}&`;
+          if (filtros.producto) url += `producto=${filtros.producto}&`;
+          if (filtros.fecha_inicio)
+            url += `fecha_inicio=${filtros.fecha_inicio}&`;
+          if (filtros.fecha_fin) url += `fecha_fin=${filtros.fecha_fin}`;
+
+          const response = await fetch(url, { credentials: "include" });
+          if (response.ok) {
+            const movimientos = await response.json();
+            renderMovimientos(movimientos);
+            actualizarResumenMovimientos(movimientos);
+          }
+        } catch (error) {
+          console.error("Error:", error);
+        }
+      }
+
+      function renderMovimientos(movimientos) {
+        const tbody = document.getElementById("movimientosTable");
+        if (movimientos.length === 0) {
+          tbody.innerHTML =
+            '<tr><td colspan="7" style="text-align: center; padding: 40px;">Sin movimientos registrados</td></tr>';
+          return;
+        }
+
+        const tipoIcons = {
+          entrada: "📥",
+          salida: "📤",
+          ajuste: "⚙️",
+        };
+
+        const tipoBadges = {
+          entrada: "badge-success",
+          salida: "badge-danger",
+          ajuste: "badge-warning",
+        };
+
+        tbody.innerHTML = movimientos
+          .map(
+            (m) => `
+      <tr>
+        <td>${new Date(m.fecha).toLocaleString("es-CO", {
+          year: "numeric",
+          month: "short",
+          day: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+        })}</td>
+        <td><span class="badge ${tipoBadges[m.tipo_movimiento]}">${
+              tipoIcons[m.tipo_movimiento]
+            } ${
+              m.tipo_movimiento.charAt(0).toUpperCase() +
+              m.tipo_movimiento.slice(1)
+            }</span></td>
+        <td>
+          <strong>${m.nombre_producto}</strong><br>
+          <small style="color: var(--text-secondary);">${m.codigo}</small>
+        </td>
+        <td><strong>${m.cantidad}</strong></td>
+        <td>${m.nombre_usuario}</td>
+        <td>${m.motivo || "-"}</td>
+        <td>${
+          m.referencia
+            ? `<span class="badge badge-info">${m.referencia}</span>`
+            : "-"
+        }</td>
+      </tr>
+    `
+          )
+          .join("");
+      }
+
+      function actualizarResumenMovimientos(movimientos) {
+        const totalMovimientos = movimientos.length;
+        const totalEntradas = movimientos
+          .filter((m) => m.tipo_movimiento === "entrada")
+          .reduce((sum, m) => sum + m.cantidad, 0);
+        const totalSalidas = movimientos
+          .filter((m) => m.tipo_movimiento === "salida")
+          .reduce((sum, m) => sum + m.cantidad, 0);
+
+        document.getElementById("totalMovimientos").textContent =
+          totalMovimientos;
+        document.getElementById("totalEntradas").textContent = totalEntradas;
+        document.getElementById("totalSalidas").textContent = totalSalidas;
+      }
+
+      function showMovimientos() {
+        hideAllViews();
+        document.getElementById("movimientosView").classList.remove("hidden");
+        loadMovimientos();
+      }
+
+      function buscarMovimientos() {
+        const filtros = {
+          tipo: document.getElementById("filtroTipoMovimiento").value,
+          producto: document.getElementById("filtroProductoMovimiento").value,
+          fecha_inicio: document.getElementById("movimientoFechaInicio").value,
+          fecha_fin: document.getElementById("movimientoFechaFin").value,
+        };
+        loadMovimientos(filtros);
       }
 
       // ====================================
