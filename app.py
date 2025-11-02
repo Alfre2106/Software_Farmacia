@@ -888,6 +888,423 @@ def reporte_resumen_general():
         cursor.close()
         db.close()
 
+# ===== RUTAS DE GESTIÓN DE USUARIOS =====
+
+@app.route('/api/usuarios', methods=['GET'])
+@login_required
+@role_required(['administrador'])
+def get_usuarios():
+    """Listar todos los usuarios (solo administradores)"""
+    try:
+        db = get_db()
+        cursor = db.cursor(dictionary=True)
+        
+        cursor.execute("""
+            SELECT id, username, nombre_completo, rol, activo, fecha_creacion, ultimo_acceso
+            FROM usuarios 
+            ORDER BY fecha_creacion DESC
+        """)
+        usuarios = cursor.fetchall()
+        
+        for u in usuarios:
+            u['fecha_creacion'] = u['fecha_creacion'].isoformat()
+            if u['ultimo_acceso']:
+                u['ultimo_acceso'] = u['ultimo_acceso'].isoformat()
+        
+        return jsonify(usuarios)
+        
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+    finally:
+        cursor.close()
+        db.close()
+
+@app.route('/api/usuarios', methods=['POST'])
+@login_required
+@role_required(['administrador'])
+def crear_usuario():
+    """Crear nuevo usuario (solo administradores)"""
+    data = request.json
+    
+    required = ['username', 'password', 'nombre_completo', 'rol']
+    if not all(field in data for field in required):
+        return jsonify({'error': 'Campos requeridos faltantes'}), 400
+    
+    # Validar rol
+    if data['rol'] not in ['administrador', 'vendedor', 'gerente']:
+        return jsonify({'error': 'Rol inválido'}), 400
+    
+    # Validar longitud de contraseña
+    if len(data['password']) < 6:
+        return jsonify({'error': 'La contraseña debe tener al menos 6 caracteres'}), 400
+    
+    try:
+        db = get_db()
+        cursor = db.cursor()
+        
+        # Verificar si el usuario ya existe
+        cursor.execute("SELECT id FROM usuarios WHERE username = %s", (data['username'],))
+        if cursor.fetchone():
+            return jsonify({'error': 'El nombre de usuario ya existe'}), 400
+        
+        # Insertar nuevo usuario
+        cursor.execute("""
+            INSERT INTO usuarios (username, password, nombre_completo, rol, activo)
+            VALUES (%s, %s, %s, %s, TRUE)
+        """, (
+            data['username'],
+            data['password'],
+            data['nombre_completo'],
+            data['rol']
+        ))
+        
+        db.commit()
+        user_id = cursor.lastrowid
+        
+        return jsonify({
+            'success': True,
+            'message': 'Usuario creado exitosamente',
+            'id': user_id
+        }), 201
+        
+    except mysql.connector.IntegrityError:
+        return jsonify({'error': 'El nombre de usuario ya existe'}), 400
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+    finally:
+        cursor.close()
+        db.close()
+
+@app.route('/api/usuarios/<int:id>', methods=['PUT'])
+@login_required
+@role_required(['administrador'])
+def actualizar_usuario(id):
+    """Actualizar usuario (solo administradores)"""
+    data = request.json
+    
+    required = ['nombre_completo', 'rol']
+    if not all(field in data for field in required):
+        return jsonify({'error': 'Nombre completo y rol son requeridos'}), 400
+    
+    # Validar rol
+    if data['rol'] not in ['administrador', 'vendedor', 'gerente']:
+        return jsonify({'error': 'Rol inválido'}), 400
+    
+    try:
+        db = get_db()
+        cursor = db.cursor()
+        
+        # Verificar que el usuario existe
+        cursor.execute("SELECT id FROM usuarios WHERE id = %s", (id,))
+        if not cursor.fetchone():
+            return jsonify({'error': 'Usuario no encontrado'}), 404
+        
+        # Si se proporciona nueva contraseña
+        if 'password' in data and data['password']:
+            if len(data['password']) < 6:
+                return jsonify({'error': 'La contraseña debe tener al menos 6 caracteres'}), 400
+            
+            cursor.execute("""
+                UPDATE usuarios 
+                SET nombre_completo = %s, rol = %s, password = %s 
+                WHERE id = %s
+            """, (data['nombre_completo'], data['rol'], data['password'], id))
+        else:
+            # Sin cambiar contraseña
+            cursor.execute("""
+                UPDATE usuarios 
+                SET nombre_completo = %s, rol = %s 
+                WHERE id = %s
+            """, (data['nombre_completo'], data['rol'], id))
+        
+        db.commit()
+        
+        return jsonify({
+            'success': True,
+            'message': 'Usuario actualizado exitosamente'
+        })
+        
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+    finally:
+        cursor.close()
+        db.close()
+
+@app.route('/api/usuarios/<int:id>/toggle', methods=['PATCH'])
+@login_required
+@role_required(['administrador'])
+def toggle_usuario(id):
+    """Activar/Desactivar usuario (solo administradores)"""
+    
+    # No permitir desactivarse a sí mismo
+    if session['user_id'] == id:
+        return jsonify({'error': 'No puedes desactivar tu propia cuenta'}), 400
+    
+    try:
+        db = get_db()
+        cursor = db.cursor(dictionary=True)
+        
+        # Obtener estado actual
+        cursor.execute("SELECT activo FROM usuarios WHERE id = %s", (id,))
+        usuario = cursor.fetchone()
+        
+        if not usuario:
+            return jsonify({'error': 'Usuario no encontrado'}), 404
+        
+        # Cambiar estado
+        nuevo_estado = not usuario['activo']
+        cursor.execute("UPDATE usuarios SET activo = %s WHERE id = %s", (nuevo_estado, id))
+        db.commit()
+        
+        return jsonify({
+            'success': True,
+            'message': f'Usuario {"activado" if nuevo_estado else "desactivado"} exitosamente',
+            'activo': nuevo_estado
+        })
+        
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+    finally:
+        cursor.close()
+        db.close()
+        
+        # ===== RUTAS DE RECEPCIONES =====
+
+@app.route('/api/recepciones', methods=['GET'])
+@login_required
+@role_required(['administrador'])
+def get_recepciones():
+    """Obtener lista de recepciones"""
+    try:
+        db = get_db()
+        cursor = db.cursor(dictionary=True)
+        
+        fecha_inicio = request.args.get('fecha_inicio')
+        fecha_fin = request.args.get('fecha_fin')
+        
+        query = """
+            SELECT r.*, u.nombre_completo as nombre_usuario,
+                   COUNT(dr.id) as total_productos
+            FROM recepciones r
+            JOIN usuarios u ON r.id_usuario = u.id
+            LEFT JOIN detalle_recepciones dr ON r.id = dr.id_recepcion
+            WHERE 1=1
+        """
+        params = []
+        
+        if fecha_inicio:
+            query += " AND DATE(r.fecha) >= %s"
+            params.append(fecha_inicio)
+        
+        if fecha_fin:
+            query += " AND DATE(r.fecha) <= %s"
+            params.append(fecha_fin)
+        
+        query += " GROUP BY r.id ORDER BY r.fecha DESC LIMIT 100"
+        
+        cursor.execute(query, params)
+        recepciones = cursor.fetchall()
+        
+        for r in recepciones:
+            r['fecha'] = r['fecha'].isoformat()
+            r['total'] = float(r['total'])
+        
+        return jsonify(recepciones)
+        
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+    finally:
+        cursor.close()
+        db.close()
+
+@app.route('/api/recepciones/<int:id>', methods=['GET'])
+@login_required
+@role_required(['administrador'])
+def get_recepcion(id):
+    """Obtener detalle de una recepción"""
+    try:
+        db = get_db()
+        cursor = db.cursor(dictionary=True)
+        
+        cursor.execute("""
+            SELECT r.*, u.nombre_completo as nombre_usuario
+            FROM recepciones r
+            JOIN usuarios u ON r.id_usuario = u.id
+            WHERE r.id = %s
+        """, (id,))
+        recepcion = cursor.fetchone()
+        
+        if not recepcion:
+            return jsonify({'error': 'Recepción no encontrada'}), 404
+        
+        cursor.execute("""
+            SELECT dr.*, p.nombre as nombre_producto, p.codigo
+            FROM detalle_recepciones dr
+            JOIN productos p ON dr.id_producto = p.id
+            WHERE dr.id_recepcion = %s
+        """, (id,))
+        detalle = cursor.fetchall()
+        
+        recepcion['fecha'] = recepcion['fecha'].isoformat()
+        recepcion['total'] = float(recepcion['total'])
+        recepcion['detalle'] = detalle
+        
+        for d in detalle:
+            d['precio_compra'] = float(d['precio_compra'])
+            d['subtotal'] = float(d['subtotal'])
+        
+        return jsonify(recepcion)
+        
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+    finally:
+        cursor.close()
+        db.close()
+
+@app.route('/api/recepciones', methods=['POST'])
+@login_required
+@role_required(['administrador'])
+def crear_recepcion():
+    """Crear nueva recepción de inventario"""
+    data = request.json
+    
+    required = ['proveedor', 'productos']
+    if not all(field in data for field in required):
+        return jsonify({'error': 'Datos incompletos'}), 400
+    
+    if not data['productos'] or len(data['productos']) == 0:
+        return jsonify({'error': 'Debe agregar al menos un producto'}), 400
+    
+    try:
+        db = get_db()
+        cursor = db.cursor()
+        
+        # Generar número de recepción
+        cursor.execute("SELECT MAX(CAST(SUBSTRING(numero_recepcion, 4) AS UNSIGNED)) as max FROM recepciones")
+        max_num = cursor.fetchone()[0] or 0
+        numero_recepcion = f"REC{str(max_num + 1).zfill(6)}"
+        
+        # Calcular total
+        total = sum(item['precio_compra'] * item['cantidad'] for item in data['productos'])
+        
+        # Insertar recepción
+        cursor.execute("""
+            INSERT INTO recepciones (numero_recepcion, fecha, proveedor, numero_documento, 
+                                    total, id_usuario, observaciones)
+            VALUES (%s, NOW(), %s, %s, %s, %s, %s)
+        """, (
+            numero_recepcion,
+            data['proveedor'],
+            data.get('numero_documento'),
+            total,
+            session['user_id'],
+            data.get('observaciones')
+        ))
+        
+        recepcion_id = cursor.lastrowid
+        
+        # Insertar detalle y actualizar inventario
+        for item in data['productos']:
+            # Insertar detalle
+            subtotal = item['precio_compra'] * item['cantidad']
+            cursor.execute("""
+                INSERT INTO detalle_recepciones (id_recepcion, id_producto, cantidad, precio_compra, subtotal)
+                VALUES (%s, %s, %s, %s, %s)
+            """, (
+                recepcion_id,
+                item['id_producto'],
+                item['cantidad'],
+                item['precio_compra'],
+                subtotal
+            ))
+            
+            # Actualizar stock del producto
+            cursor.execute("""
+                UPDATE productos 
+                SET stock_actual = stock_actual + %s,
+                    precio_compra = %s
+                WHERE id = %s
+            """, (item['cantidad'], item['precio_compra'], item['id_producto']))
+            
+            # Registrar movimiento de inventario
+            cursor.execute("""
+                INSERT INTO movimientos_inventario (id_producto, tipo_movimiento, cantidad, 
+                                                    id_usuario, motivo, referencia)
+                VALUES (%s, 'entrada', %s, %s, 'Recepción de inventario', %s)
+            """, (item['id_producto'], item['cantidad'], session['user_id'], numero_recepcion))
+        
+        db.commit()
+        
+        return jsonify({
+            'success': True,
+            'id': recepcion_id,
+            'numero_recepcion': numero_recepcion,
+            'total': total
+        }), 201
+        
+    except Exception as e:
+        db.rollback()
+        return jsonify({'error': str(e)}), 500
+    finally:
+        cursor.close()
+        db.close()
+        
+        # ===== RUTAS DE MOVIMIENTOS DE INVENTARIO =====
+
+@app.route('/api/movimientos', methods=['GET'])
+@login_required
+def get_movimientos():
+    """Obtener historial de movimientos de inventario"""
+    try:
+        db = get_db()
+        cursor = db.cursor(dictionary=True)
+        
+        tipo = request.args.get('tipo')
+        producto = request.args.get('producto')
+        fecha_inicio = request.args.get('fecha_inicio')
+        fecha_fin = request.args.get('fecha_fin')
+        
+        query = """
+            SELECT m.*, p.nombre as nombre_producto, p.codigo,
+                   u.nombre_completo as nombre_usuario
+            FROM movimientos_inventario m
+            JOIN productos p ON m.id_producto = p.id
+            JOIN usuarios u ON m.id_usuario = u.id
+            WHERE 1=1
+        """
+        params = []
+        
+        if tipo:
+            query += " AND m.tipo_movimiento = %s"
+            params.append(tipo)
+        
+        if producto:
+            query += " AND (p.nombre LIKE %s OR p.codigo LIKE %s)"
+            params.extend([f'%{producto}%', f'%{producto}%'])
+        
+        if fecha_inicio:
+            query += " AND DATE(m.fecha) >= %s"
+            params.append(fecha_inicio)
+        
+        if fecha_fin:
+            query += " AND DATE(m.fecha) <= %s"
+            params.append(fecha_fin)
+        
+        query += " ORDER BY m.fecha DESC LIMIT 500"
+        
+        cursor.execute(query, params)
+        movimientos = cursor.fetchall()
+        
+        for m in movimientos:
+            m['fecha'] = m['fecha'].isoformat()
+        
+        return jsonify(movimientos)
+        
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+    finally:
+        cursor.close()
+        db.close()
 # ===== INICIAR SERVIDOR =====
 
 if __name__ == '__main__':
