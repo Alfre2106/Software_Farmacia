@@ -199,12 +199,9 @@ pip install --force-reinstall -r requirements.txt
 
 ## 👨‍💻 Equipo de desarrollo
 
-**Desarrollado por SOFTSCAPE:**
+**Desarrollado por:**
 - Alfredo Mercado
-- Edgar Rodelo
-- Jesús Cera
-- Fabián Polo
-- Miguelangel De La Hoz
+
 
 ---
 
@@ -213,5 +210,6 @@ pip install --force-reinstall -r requirements.txt
 Este proyecto es de uso educativo.
 
 ---
+
 
 
